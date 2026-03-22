@@ -2,1252 +2,802 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Abhi's Mind — Daily Wellness</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Abhi's Mind">
+<meta name="theme-color" content="#F5F0E8">
+<meta name="description" content="A personal space for honest self-growth — one day at a time.">
+<link rel="manifest" href="data:application/json,{%22name%22:%22Arav%27s+Mind%22,%22short_name%22:%22Arav%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23F5F0E8%22,%22theme_color%22:%22%23F5F0E8%22}">
+<title>Arav's Mind</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #F5F0E8;
-    --warm-white: #FAF7F2;
-    --sand: #E8DFD0;
-    --clay: #C4A882;
-    --terracotta: #B5714A;
-    --rust: #8B4513;
-    --bark: #5C3D2E;
-    --sage: #7A8C6E;
-    --sage-light: #A8B99A;
-    --moss: #4A5C3F;
-    --amber: #C17F3A;
-    --amber-light: #E8C48A;
-    --text-dark: #2C1F14;
-    --text-mid: #5C4033;
-    --text-soft: #8B7355;
-    --text-muted: #A69070;
-    --border: rgba(139, 115, 85, 0.2);
-    --border-strong: rgba(139, 115, 85, 0.4);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text-dark);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* Texture overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.6;
-  }
-
-  .page { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
-
-  /* Header */
-  header {
-    padding: 48px 0 32px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-
-  .header-left h1 {
-    font-family: 'Lora', serif;
-    font-size: 32px;
-    font-weight: 400;
-    color: var(--text-dark);
-    letter-spacing: -0.5px;
-    line-height: 1.2;
-  }
-
-  .header-left h1 span {
-    color: var(--terracotta);
-    font-style: italic;
-  }
-
-  .header-left p {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 6px;
-    letter-spacing: 0.03em;
-  }
-
-  .header-right {
-    text-align: right;
-  }
-
-  .date-display {
-    font-size: 12px;
-    color: var(--text-muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  /* Streak bar */
-  .streak-section {
-    background: var(--bark);
-    border-radius: 16px;
-    padding: 28px 32px;
-    margin-bottom: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .streak-section::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 160px; height: 160px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 50%;
-  }
-
-  .streak-number {
-    font-family: 'Lora', serif;
-    font-size: 56px;
-    font-weight: 600;
-    color: var(--amber-light);
-    line-height: 1;
-  }
-
-  .streak-label {
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-top: 4px;
-  }
-
-  .streak-dots {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    flex: 1;
-    justify-content: flex-end;
-  }
-
-  .dot {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255,255,255,0.2);
-    background: transparent;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    color: rgba(255,255,255,0.3);
-    position: relative;
-  }
-
-  .dot.done {
-    background: var(--terracotta);
-    border-color: var(--terracotta);
-  }
-
-  .dot.today {
-    border-color: var(--amber-light);
-    color: var(--amber-light);
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  .dot-label {
-    font-size: 10px;
-    color: rgba(255,255,255,0.3);
-    text-align: center;
-    margin-top: 4px;
-  }
-
-  .dot-group { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(232,196,138,0.4); }
-    50% { box-shadow: 0 0 0 6px rgba(232,196,138,0); }
-  }
-
-  /* Nav tabs */
-  .nav-tabs {
-    display: flex;
-    gap: 4px;
-    background: var(--sand);
-    padding: 4px;
-    border-radius: 12px;
-    margin-bottom: 32px;
-  }
-
-  .tab-btn {
-    flex: 1;
-    padding: 10px 16px;
-    border: none;
-    background: transparent;
-    border-radius: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--text-soft);
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-
-  .tab-btn.active {
-    background: var(--warm-white);
-    color: var(--text-dark);
-    font-weight: 500;
-    box-shadow: 0 1px 4px rgba(92,61,46,0.12);
-  }
-
-  .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.5); }
-
-  /* Views */
-  .view { display: none; animation: fadeIn 0.3s ease; }
-  .view.active { display: block; }
-
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* Section label */
-  .section-label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 14px;
-  }
-
-  /* Daily learning card */
-  .day-card {
-    background: var(--warm-white);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px 32px;
-    margin-bottom: 20px;
-  }
-
-  .day-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-
-  .day-badge {
-    background: var(--terracotta);
-    color: white;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    padding: 4px 12px;
-    border-radius: 999px;
-    text-transform: uppercase;
-  }
-
-  .week-tag {
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-
-  .day-title {
-    font-family: 'Lora', serif;
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--text-dark);
-    margin-bottom: 8px;
-    line-height: 1.3;
-  }
-
-  .day-desc {
-    font-size: 14px;
-    color: var(--text-soft);
-    line-height: 1.7;
-    margin-bottom: 24px;
-  }
-
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-
-  .mini-card {
-    background: var(--cream);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 18px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .mini-card:hover { border-color: var(--clay); transform: translateY(-1px); }
-
-  .mini-tag {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  .tag-concept { color: var(--terracotta); }
-  .tag-practice { color: var(--sage); }
-
-  .mini-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-dark);
-    margin-bottom: 4px;
-  }
-
-  .mini-desc { font-size: 12px; color: var(--text-soft); line-height: 1.6; }
-
-  /* Awareness cue */
-  .awareness-cue {
-    border-left: 3px solid var(--amber);
-    padding: 14px 18px;
-    background: rgba(193,127,58,0.08);
-    border-radius: 0 10px 10px 0;
-    margin-bottom: 20px;
-  }
-
-  .cue-label {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--amber);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 6px;
-  }
-
-  .cue-text {
-    font-size: 14px;
-    color: var(--text-dark);
-    line-height: 1.7;
-  }
-
-  .cue-text em { font-style: italic; color: var(--terracotta); }
-
-  /* Week days list */
-  .week-list { display: flex; flex-direction: column; gap: 10px; }
-
-  .week-item {
-    background: var(--warm-white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .week-item:hover { border-color: var(--clay); background: var(--sand); }
-
-  .week-item.current { border-color: var(--terracotta); background: rgba(181,113,74,0.06); }
-
-  .day-num {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--sand);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-soft);
-    flex-shrink: 0;
-  }
-
-  .week-item.current .day-num {
-    background: var(--terracotta);
-    color: white;
-  }
-
-  .week-item.done-day .day-num {
-    background: var(--sage);
-    color: white;
-  }
-
-  .week-item-title { font-size: 14px; font-weight: 500; color: var(--text-dark); }
-  .week-item-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-  .week-item-arrow { margin-left: auto; color: var(--text-muted); font-size: 16px; }
-
-  /* Problems grid */
-  .problems-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
-
-  .problem-card {
-    background: var(--warm-white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .problem-card:hover { border-color: var(--clay); transform: translateY(-1px); }
-
-  .problem-num {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text-muted);
-    letter-spacing: 0.06em;
-    margin-bottom: 6px;
-  }
-
-  .problem-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-dark);
-    margin-bottom: 6px;
-    line-height: 1.4;
-  }
-
-  .problem-quote {
-    font-size: 12px;
-    color: var(--text-soft);
-    font-style: italic;
-    line-height: 1.5;
-  }
-
-  /* Themes */
-  .themes-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
-
-  .theme-item {
-    background: var(--warm-white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-  }
-
-  .theme-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-top: 5px;
-    flex-shrink: 0;
-  }
-
-  .theme-title { font-size: 14px; font-weight: 500; color: var(--text-dark); margin-bottom: 4px; }
-  .theme-problems { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
-  .theme-desc { font-size: 13px; color: var(--text-soft); line-height: 1.6; }
-
-  /* Mantras */
-  .mantras-list { display: flex; flex-direction: column; gap: 14px; }
-
-  .mantra-card {
-    background: var(--warm-white);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px 24px;
-    transition: all 0.2s;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .mantra-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 4px;
-    border-radius: 14px 0 0 14px;
-  }
-
-  .mantra-card:hover { transform: translateX(3px); }
-
-  .mantra-for {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-  }
-
-  .mantra-text {
-    font-family: 'Lora', serif;
-    font-size: 16px;
-    font-style: italic;
-    color: var(--text-dark);
-    line-height: 1.6;
-  }
-
-  .mantra-science {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 8px;
-    line-height: 1.5;
-  }
-
-  /* Accentcolors for mantra cards */
-  .mc-1::before { background: var(--terracotta); }
-  .mc-2::before { background: var(--sage); }
-  .mc-3::before { background: var(--amber); }
-  .mc-4::before { background: var(--clay); }
-  .mc-5::before { background: var(--moss); }
-  .mc-6::before { background: var(--rust); }
-
-  /* Today's mantra highlight */
-  .featured-mantra {
-    background: var(--bark);
-    border-radius: 16px;
-    padding: 28px 32px;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .featured-mantra::before {
-    content: '"';
-    position: absolute;
-    top: -10px; right: 20px;
-    font-family: 'Lora', serif;
-    font-size: 120px;
-    color: rgba(255,255,255,0.06);
-    line-height: 1;
-  }
-
-  .featured-label {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--amber-light);
-    margin-bottom: 12px;
-    opacity: 0.8;
-  }
-
-  .featured-text {
-    font-family: 'Lora', serif;
-    font-size: 19px;
-    font-style: italic;
-    color: white;
-    line-height: 1.6;
-    margin-bottom: 8px;
-  }
-
-  .featured-problem {
-    font-size: 12px;
-    color: rgba(255,255,255,0.45);
-  }
-
-  /* Refresh button */
-  .refresh-btn {
-    background: transparent;
-    border: 1px solid var(--border-strong);
-    border-radius: 8px;
-    padding: 7px 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    color: var(--text-soft);
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-bottom: 20px;
-  }
-
-  .refresh-btn:hover { background: var(--sand); color: var(--text-dark); }
-
-  /* Responsive */
-  @media (max-width: 600px) {
-    .two-col { grid-template-columns: 1fr; }
-    .problems-grid { grid-template-columns: 1fr; }
-    header { flex-direction: column; align-items: flex-start; gap: 8px; }
-    .streak-section { flex-direction: column; align-items: flex-start; }
-    .streak-dots { justify-content: flex-start; }
-    .tab-btn { font-size: 11px; padding: 9px 10px; }
-  }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--cream); }
-  ::-webkit-scrollbar-thumb { background: var(--clay); border-radius: 3px; }
-
-  /* Insights */
-  .insight-hero {
-    background: var(--bark);
-    border-radius: 20px;
-    padding: 36px 36px 32px;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  .insight-hero:hover { transform: translateY(-2px); }
-  .insight-hero::after {
-    content: '';
-    position: absolute;
-    bottom: -30px; right: -30px;
-    width: 140px; height: 140px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.04);
-  }
-  .insight-hero::before {
-    content: '';
-    position: absolute;
-    top: -20px; left: -20px;
-    width: 100px; height: 100px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.03);
-  }
-  .insight-category-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 999px;
-    padding: 4px 12px;
-    margin-bottom: 16px;
-  }
-  .insight-category-badge .cat-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--amber-light);
-  }
-  .insight-category-badge span {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.65);
-  }
-  .insight-hero-title {
-    font-family: 'Lora', serif;
-    font-size: 22px;
-    font-weight: 500;
-    color: white;
-    line-height: 1.4;
-    margin-bottom: 14px;
-  }
-  .insight-hero-body {
-    font-size: 14px;
-    color: rgba(255,255,255,0.7);
-    line-height: 1.8;
-    margin-bottom: 20px;
-  }
-  .insight-hero-why {
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 16px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.45);
-    line-height: 1.6;
-    font-style: italic;
-  }
-  .insight-hero-why strong {
-    color: var(--amber-light);
-    font-style: normal;
-    font-weight: 500;
-  }
-
-  .ins-nav-btn:hover { background: var(--sand); color: var(--text-dark); }
-
-  .insights-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 28px;
-  }
-  .ins-card {
-    background: var(--warm-white);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .ins-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    border-radius: 14px 14px 0 0;
-  }
-  .ins-card:hover { border-color: var(--clay); transform: translateY(-2px); }
-  .ins-cat {
-    font-size: 10px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    margin-bottom: 8px;
-    margin-top: 6px;
-  }
-  .ins-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-dark);
-    line-height: 1.4;
-    margin-bottom: 6px;
-  }
-  .ins-preview {
-    font-size: 12px;
-    color: var(--text-muted);
-    line-height: 1.6;
-  }
-
-  .cat-psychology::before { background: var(--terracotta); }
-  .cat-psychology .ins-cat { color: var(--terracotta); }
-  .cat-neuroscience::before { background: var(--moss); }
-  .cat-neuroscience .ins-cat { color: var(--moss); }
-  .cat-behaviour::before { background: var(--amber); }
-  .cat-behaviour .ins-cat { color: var(--amber); }
-  .cat-listening::before { background: var(--sage); }
-  .cat-listening .ins-cat { color: var(--sage); }
-  .cat-observation::before { background: var(--clay); }
-  .cat-observation .ins-cat { color: var(--clay); }
-  .cat-emotional::before { background: var(--rust); }
-  .cat-emotional .ins-cat { color: var(--rust); }
-
-  .ins-today {
-    border-color: var(--terracotta) !important;
-    background: rgba(181,113,74,0.06) !important;
-  }
-  .ins-today-badge {
-    display: inline-block;
-    background: var(--terracotta);
-    color: white;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    padding: 2px 9px;
-    border-radius: 999px;
-    margin-bottom: 8px;
-    margin-top: 4px;
-  }
-
-  .insight-modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(44,31,20,0.6);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-  }
-  .insight-modal-overlay.open { display: flex; }
-  .insight-modal {
-    background: var(--warm-white);
-    border-radius: 20px;
-    padding: 32px;
-    max-width: 520px;
-    width: 100%;
-    max-height: 80vh;
-    overflow-y: auto;
-    position: relative;
-    animation: modalIn 0.25s ease;
-  }
-  @keyframes modalIn { from { opacity:0; transform:scale(0.95) translateY(10px); } to { opacity:1; transform:none; } }
-  .modal-close {
-    position: absolute;
-    top: 16px; right: 16px;
-    background: var(--sand);
-    border: none;
-    border-radius: 50%;
-    width: 30px; height: 30px;
-    font-size: 16px;
-    color: var(--text-soft);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.15s;
-  }
-  .modal-close:hover { background: var(--clay); color: white; }
-  .modal-cat {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    margin-bottom: 12px;
-  }
-  .modal-title {
-    font-family: 'Lora', serif;
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--text-dark);
-    line-height: 1.4;
-    margin-bottom: 14px;
-  }
-  .modal-body {
-    font-size: 14px;
-    color: var(--text-soft);
-    line-height: 1.8;
-    margin-bottom: 16px;
-  }
-  .modal-remember {
-    background: var(--cream);
-    border-radius: 10px;
-    padding: 14px 16px;
-    font-size: 13px;
-    color: var(--text-dark);
-    line-height: 1.7;
-    border-left: 3px solid var(--terracotta);
-  }
-  .modal-remember strong { color: var(--terracotta); font-weight: 500; }
+:root {
+  --cream: #F5F0E8;
+  --warm-white: #FAF7F2;
+  --sand: #E8DFD0;
+  --clay: #C4A882;
+  --terracotta: #B5714A;
+  --rust: #8B4513;
+  --bark: #5C3D2E;
+  --sage: #7A8C6E;
+  --moss: #4A5C3F;
+  --amber: #C17F3A;
+  --amber-light: #E8C48A;
+  --text-dark: #2C1F14;
+  --text-soft: #8B7355;
+  --text-muted: #A69070;
+  --border: rgba(139,115,85,0.18);
+  --border-strong: rgba(139,115,85,0.38);
+  --sidebar-w: 260px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+html,body{height:100%;overflow:hidden;}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--cream);
+  color:var(--text-dark);
+}
+
+/* ── NOISE TEXTURE ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
+
+/* ════════════════════════════════
+   DESKTOP LAYOUT (≥900px)
+   ════════════════════════════════ */
+.app{
+  position:relative;z-index:1;
+  display:flex;height:100vh;
+}
+
+/* Sidebar */
+.sidebar{
+  width:var(--sidebar-w);
+  flex-shrink:0;
+  background:var(--bark);
+  display:flex;flex-direction:column;
+  padding:0;
+  overflow:hidden;
+  transition:width 0.3s ease;
+}
+
+.sidebar-brand{
+  padding:32px 24px 24px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.sidebar-brand h1{
+  font-family:'Lora',serif;
+  font-size:22px;font-weight:400;
+  color:white;line-height:1.2;
+}
+.sidebar-brand h1 span{color:var(--amber-light);font-style:italic;}
+.sidebar-brand p{
+  font-size:11px;color:rgba(255,255,255,0.4);
+  margin-top:5px;letter-spacing:0.03em;
+  line-height:1.5;
+}
+
+.sidebar-streak{
+  padding:20px 24px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.streak-row{display:flex;align-items:baseline;gap:8px;margin-bottom:10px;}
+.streak-num{
+  font-family:'Lora',serif;font-size:40px;font-weight:600;
+  color:var(--amber-light);line-height:1;
+}
+.streak-lbl{font-size:11px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.09em;}
+.streak-dots-row{display:flex;gap:5px;}
+.sdot{
+  width:22px;height:22px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,0.18);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;color:rgba(255,255,255,0.25);
+}
+.sdot.done{background:var(--terracotta);border-color:var(--terracotta);color:white;}
+.sdot.today{border-color:var(--amber-light);color:var(--amber-light);}
+.sdot-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.sdot-lbl{font-size:9px;color:rgba(255,255,255,0.25);}
+
+/* Sidebar nav */
+.sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
+.snav-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;border:none;
+  background:transparent;border-radius:10px;
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:400;
+  color:rgba(255,255,255,0.55);
+  cursor:pointer;text-align:left;width:100%;
+  transition:all 0.18s;
+}
+.snav-btn:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.85);}
+.snav-btn.active{background:rgba(255,255,255,0.12);color:white;font-weight:500;}
+.snav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
+
+.sidebar-date{
+  padding:16px 24px;
+  border-top:1px solid rgba(255,255,255,0.08);
+  font-size:11px;color:rgba(255,255,255,0.3);
+  letter-spacing:0.06em;text-transform:uppercase;
+}
+
+/* Main content area */
+.main{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  padding:40px 48px 60px;
+  scroll-behavior:smooth;
+}
+
+.view{display:none;animation:fadeUp 0.28s ease;}
+.view.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+/* ── SECTION LABEL ── */
+.section-label{
+  font-size:11px;font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:14px;
+}
+
+/* ── PAGE HEADER (desktop only) ── */
+.page-header{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:32px;padding-bottom:24px;
+  border-bottom:1px solid var(--border);
+}
+.page-title{font-family:'Lora',serif;font-size:28px;font-weight:400;color:var(--text-dark);line-height:1.2;}
+.page-title span{color:var(--terracotta);font-style:italic;}
+.page-date{font-size:12px;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;}
+
+/* ── STREAK CARD (mobile only, hidden desktop) ── */
+.mobile-streak{display:none;}
+
+/* ── CARDS ── */
+.day-card{
+  background:var(--warm-white);border:1px solid var(--border);
+  border-radius:16px;padding:28px 32px;margin-bottom:20px;
+}
+.day-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.day-badge{
+  background:var(--terracotta);color:white;
+  font-size:11px;font-weight:500;letter-spacing:0.06em;
+  padding:4px 12px;border-radius:999px;text-transform:uppercase;
+}
+.week-tag{font-size:12px;color:var(--text-muted);}
+.day-title{font-family:'Lora',serif;font-size:24px;font-weight:500;color:var(--text-dark);margin-bottom:8px;line-height:1.3;}
+.day-desc{font-size:14px;color:var(--text-soft);line-height:1.75;margin-bottom:24px;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.mini-card{
+  background:var(--cream);border:1px solid var(--border);
+  border-radius:12px;padding:16px 18px;
+  cursor:pointer;transition:all 0.2s;
+}
+.mini-card:hover{border-color:var(--clay);transform:translateY(-1px);}
+.mini-tag{font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;}
+.tag-concept{color:var(--terracotta);}
+.tag-practice{color:var(--sage);}
+.mini-title{font-size:14px;font-weight:500;color:var(--text-dark);margin-bottom:4px;}
+.mini-desc{font-size:12px;color:var(--text-soft);line-height:1.6;}
+
+.awareness-cue{
+  border-left:3px solid var(--amber);padding:14px 18px;
+  background:rgba(193,127,58,0.08);border-radius:0 10px 10px 0;margin-bottom:20px;
+}
+.cue-label{font-size:11px;font-weight:500;color:var(--amber);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;}
+.cue-text{font-size:14px;color:var(--text-dark);line-height:1.7;}
+.cue-text em{font-style:italic;color:var(--terracotta);}
+
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.pill{background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft);}
+
+.mark-btn{
+  background:transparent;border:1px solid var(--border-strong);
+  border-radius:8px;padding:9px 18px;
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-soft);
+  cursor:pointer;transition:all 0.2s;margin-top:4px;
+}
+.mark-btn:hover{background:var(--sand);color:var(--text-dark);}
+
+/* ── WEEK VIEW ── */
+.week-list{display:flex;flex-direction:column;gap:10px;}
+.week-item{
+  background:var(--warm-white);border:1px solid var(--border);
+  border-radius:12px;padding:16px 20px;
+  display:flex;align-items:center;gap:16px;
+  cursor:pointer;transition:all 0.2s;
+}
+.week-item:hover{border-color:var(--clay);background:var(--sand);}
+.week-item.current{border-color:var(--terracotta);background:rgba(181,113,74,0.06);}
+.week-item.done-day .day-num{background:var(--sage);color:white;}
+.day-num{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--sand);display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:500;color:var(--text-soft);flex-shrink:0;
+}
+.week-item.current .day-num{background:var(--terracotta);color:white;}
+.week-item-title{font-size:14px;font-weight:500;color:var(--text-dark);}
+.week-item-sub{font-size:12px;color:var(--text-muted);margin-top:2px;}
+.week-item-arrow{margin-left:auto;color:var(--text-muted);font-size:16px;}
+
+.ahead-box{
+  margin-top:28px;padding:20px 24px;
+  background:var(--warm-white);border:1px solid var(--border);border-radius:14px;
+}
+.ahead-item{display:flex;gap:12px;align-items:center;}
+.ahead-num{
+  width:28px;height:28px;border-radius:50%;background:var(--sand);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:500;color:var(--text-soft);flex-shrink:0;
+}
+.ahead-title{font-size:13px;font-weight:500;color:var(--text-dark);}
+.ahead-sub{font-size:12px;color:var(--text-muted);}
+
+/* ── PROBLEMS ── */
+.problems-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;}
+.problem-card{
+  background:var(--warm-white);border:1px solid var(--border);
+  border-radius:12px;padding:18px;cursor:pointer;transition:all 0.2s;
+}
+.problem-card:hover{border-color:var(--clay);transform:translateY(-1px);}
+.problem-num{font-size:11px;font-weight:500;color:var(--text-muted);letter-spacing:0.06em;margin-bottom:6px;}
+.problem-name{font-size:14px;font-weight:500;color:var(--text-dark);margin-bottom:6px;line-height:1.4;}
+.problem-quote{font-size:12px;color:var(--text-soft);font-style:italic;line-height:1.5;}
+
+.themes-row{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
+.theme-item{
+  background:var(--warm-white);border:1px solid var(--border);
+  border-radius:12px;padding:16px 20px;display:flex;align-items:flex-start;gap:14px;
+}
+.theme-dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.theme-title{font-size:14px;font-weight:500;color:var(--text-dark);margin-bottom:4px;}
+.theme-problems{font-size:12px;color:var(--text-muted);margin-bottom:4px;}
+.theme-desc{font-size:13px;color:var(--text-soft);line-height:1.6;}
+.closing-quote{
+  padding:16px 20px;background:var(--warm-white);
+  border:1px solid var(--border);border-radius:12px;text-align:center;
+}
+.closing-quote p{font-family:'Lora',serif;font-size:15px;font-style:italic;color:var(--text-soft);line-height:1.7;}
+
+/* ── MANTRAS ── */
+.featured-mantra{
+  background:var(--bark);border-radius:16px;
+  padding:28px 32px;margin-bottom:24px;
+  position:relative;overflow:hidden;
+}
+.featured-mantra::before{
+  content:'"';position:absolute;top:-10px;right:20px;
+  font-family:'Lora',serif;font-size:120px;
+  color:rgba(255,255,255,0.06);line-height:1;
+}
+.featured-label{
+  font-size:11px;font-weight:500;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--amber-light);margin-bottom:12px;opacity:0.8;
+}
+.featured-text{
+  font-family:'Lora',serif;font-size:18px;font-style:italic;
+  color:white;line-height:1.6;margin-bottom:8px;
+}
+.featured-problem{font-size:12px;color:rgba(255,255,255,0.45);}
+.refresh-btn{
+  background:transparent;border:1px solid var(--border-strong);
+  border-radius:8px;padding:7px 14px;
+  font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-soft);
+  cursor:pointer;transition:all 0.2s;margin-bottom:20px;
+}
+.refresh-btn:hover{background:var(--sand);color:var(--text-dark);}
+.mantras-list{display:flex;flex-direction:column;gap:14px;}
+.mantra-card{
+  background:var(--warm-white);border:1px solid var(--border);
+  border-radius:14px;padding:20px 24px;
+  transition:all 0.2s;cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.mantra-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:4px;border-radius:14px 0 0 14px;
+}
+.mantra-card:hover{transform:translateX(3px);}
+.mantra-for{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:8px;}
+.mantra-text{font-family:'Lora',serif;font-size:16px;font-style:italic;color:var(--text-dark);line-height:1.6;}
+.mantra-science{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5;}
+.mc-1::before{background:var(--terracotta);}
+.mc-2::before{background:var(--sage);}
+.mc-3::before{background:var(--amber);}
+.mc-4::before{background:var(--clay);}
+.mc-5::before{background:var(--moss);}
+.mc-6::before{background:var(--rust);}
+
+/* ── INSIGHTS ── */
+.insight-hero{
+  background:var(--bark);border-radius:20px;
+  padding:32px 32px 28px;margin-bottom:20px;
+  position:relative;overflow:hidden;cursor:pointer;transition:transform 0.2s;
+}
+.insight-hero:hover{transform:translateY(-2px);}
+.insight-hero::after{
+  content:'';position:absolute;bottom:-30px;right:-30px;
+  width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,0.04);
+}
+.insight-cat-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);
+  border-radius:999px;padding:4px 12px;margin-bottom:16px;
+}
+.insight-cat-badge .cdot{width:6px;height:6px;border-radius:50%;background:var(--amber-light);}
+.insight-cat-badge span{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.65);}
+.insight-hero-title{font-family:'Lora',serif;font-size:20px;font-weight:500;color:white;line-height:1.4;margin-bottom:12px;}
+.insight-hero-body{font-size:14px;color:rgba(255,255,255,0.68);line-height:1.8;margin-bottom:18px;}
+.insight-hero-why{
+  border-top:1px solid rgba(255,255,255,0.1);padding-top:14px;
+  font-size:13px;color:rgba(255,255,255,0.45);line-height:1.6;font-style:italic;
+}
+.insight-hero-why strong{color:var(--amber-light);font-style:normal;font-weight:500;}
+.tap-hint{margin-top:16px;font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:0.04em;}
+.changes-row{
+  display:flex;align-items:center;gap:10px;margin-bottom:28px;
+}
+.changes-row hr{flex:1;border:none;border-top:1px solid var(--border);}
+.changes-row span{font-size:11px;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;}
+.insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;}
+.ins-card{
+  background:var(--warm-white);border:1px solid var(--border);
+  border-radius:14px;padding:18px 20px;
+  cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;
+}
+.ins-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0;}
+.ins-card:hover{border-color:var(--clay);transform:translateY(-2px);}
+.ins-cat{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:8px;margin-top:6px;}
+.ins-title{font-size:14px;font-weight:500;color:var(--text-dark);line-height:1.4;margin-bottom:6px;}
+.ins-preview{font-size:12px;color:var(--text-muted);line-height:1.6;}
+.ins-today{border-color:var(--terracotta)!important;background:rgba(181,113,74,0.06)!important;}
+.ins-today-badge{
+  display:inline-block;background:var(--terracotta);color:white;
+  font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;
+  padding:2px 9px;border-radius:999px;margin-bottom:8px;margin-top:4px;
+}
+.cat-psychology::before{background:var(--terracotta);}
+.cat-psychology .ins-cat{color:var(--terracotta);}
+.cat-neuroscience::before{background:var(--moss);}
+.cat-neuroscience .ins-cat{color:var(--moss);}
+.cat-behaviour::before{background:var(--amber);}
+.cat-behaviour .ins-cat{color:var(--amber);}
+.cat-listening::before{background:var(--sage);}
+.cat-listening .ins-cat{color:var(--sage);}
+.cat-observation::before{background:var(--clay);}
+.cat-observation .ins-cat{color:var(--clay);}
+.cat-emotional::before{background:var(--rust);}
+.cat-emotional .ins-cat{color:var(--rust);}
+
+/* ── MODAL ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(44,31,20,0.55);
+  z-index:200;align-items:center;justify-content:center;padding:24px;
+  backdrop-filter:blur(2px);
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--warm-white);border-radius:20px;
+  padding:32px;max-width:520px;width:100%;
+  max-height:85vh;overflow-y:auto;position:relative;
+  animation:modalIn 0.22s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(0.95) translateY(12px);}to{opacity:1;transform:none;}}
+.modal-close{
+  position:absolute;top:16px;right:16px;
+  background:var(--sand);border:none;border-radius:50%;
+  width:30px;height:30px;font-size:15px;color:var(--text-soft);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background 0.15s;
+}
+.modal-close:hover{background:var(--clay);color:white;}
+.modal-cat{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:12px;}
+.modal-title{font-family:'Lora',serif;font-size:20px;font-weight:500;color:var(--text-dark);line-height:1.4;margin-bottom:14px;}
+.modal-body{font-size:14px;color:var(--text-soft);line-height:1.8;margin-bottom:16px;}
+.modal-remember{
+  background:var(--cream);border-radius:10px;padding:14px 16px;
+  font-size:13px;color:var(--text-dark);line-height:1.7;
+  border-left:3px solid var(--terracotta);
+}
+.modal-remember strong{color:var(--terracotta);font-weight:500;}
+
+/* ════════════════════════════════
+   MOBILE BOTTOM NAV (≤899px)
+   ════════════════════════════════ */
+@media(max-width:899px){
+  html,body{overflow:hidden;}
+
+  .app{flex-direction:column;height:100dvh;}
+
+  .sidebar{display:none;}
+
+  .main{
+    flex:1;padding:0;
+    overflow-y:auto;overflow-x:hidden;
+    padding-bottom:calc(70px + var(--safe-bottom));
+  }
+
+  /* Mobile top bar */
+  .mobile-topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:calc(14px + var(--safe-top)) 20px 14px;
+    background:var(--warm-white);
+    border-bottom:1px solid var(--border);
+    position:sticky;top:0;z-index:50;
+  }
+  .mobile-topbar h1{font-family:'Lora',serif;font-size:20px;font-weight:400;color:var(--text-dark);}
+  .mobile-topbar h1 span{color:var(--terracotta);font-style:italic;}
+  .mobile-topbar .topbar-date{font-size:11px;color:var(--text-muted);letter-spacing:0.05em;}
+
+  /* Mobile streak visible inline */
+  .mobile-streak{
+    display:block;
+    margin:16px 16px 0;
+    background:var(--bark);border-radius:14px;
+    padding:18px 20px;
+  }
+  .mobile-streak .streak-row{display:flex;align-items:baseline;gap:8px;margin-bottom:10px;}
+  .mobile-streak .streak-num{font-family:'Lora',serif;font-size:36px;font-weight:600;color:var(--amber-light);line-height:1;}
+  .mobile-streak .streak-lbl{font-size:11px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.09em;}
+  .mobile-streak .streak-dots-row{display:flex;gap:6px;}
+
+  .view{padding:16px 16px 0;}
+  .page-header{display:none;}
+
+  /* Bottom nav */
+  .bottom-nav{
+    display:flex;
+    position:fixed;bottom:0;left:0;right:0;
+    background:var(--warm-white);
+    border-top:1px solid var(--border);
+    padding-bottom:var(--safe-bottom);
+    z-index:100;
+  }
+  .bnav-btn{
+    flex:1;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:3px;padding:10px 4px;
+    background:transparent;border:none;
+    font-family:'DM Sans',sans-serif;font-size:10px;
+    color:var(--text-muted);cursor:pointer;
+    transition:color 0.15s;
+  }
+  .bnav-btn.active{color:var(--terracotta);}
+  .bnav-icon{font-size:20px;line-height:1;}
+  .bnav-label{letter-spacing:0.02em;}
+
+  .two-col{grid-template-columns:1fr 1fr;}
+  .problems-grid{grid-template-columns:1fr;}
+  .insights-grid{grid-template-columns:1fr;}
+  .day-card{padding:20px;}
+  .day-title{font-size:20px;}
+  .featured-text{font-size:16px;}
+  .insight-hero{padding:24px 22px 20px;}
+  .insight-hero-title{font-size:17px;}
+}
+
+/* ════════════════════════════════
+   VERY SMALL PHONES (≤380px)
+   ════════════════════════════════ */
+@media(max-width:380px){
+  .two-col{grid-template-columns:1fr;}
+  .bnav-label{display:none;}
+  .bnav-btn{padding:12px 4px;}
+  .bnav-icon{font-size:22px;}
+}
+
+/* Desktop hides mobile elements */
+@media(min-width:900px){
+  .mobile-topbar,.bottom-nav,.mobile-streak{display:none!important;}
+}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--clay);border-radius:3px;opacity:0.5;}
 </style>
 </head>
 <body>
-<div class="page">
 
-  <!-- Header -->
-  <header>
-    <div class="header-left">
+<div class="app">
+
+  <!-- ═══ SIDEBAR (desktop) ═══ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
       <h1>Arav's <span>Mind</span></h1>
-      <p>A personal space for honest self-growth · one day at a time</p>
+      <p>A personal space for honest self-growth</p>
     </div>
-    <div class="header-right">
-      <div class="date-display" id="today-date"></div>
-    </div>
-  </header>
 
-  <!-- Streak -->
-  <div class="streak-section">
-    <div>
-      <div class="streak-number" id="streak-count">1</div>
-      <div class="streak-label">Day streak</div>
+    <div class="sidebar-streak">
+      <div class="streak-row">
+        <div class="streak-num" id="s-streak-num">1</div>
+        <div class="streak-lbl">day streak</div>
+      </div>
+      <div class="streak-dots-row" id="s-streak-dots"></div>
     </div>
-    <div class="streak-dots" id="streak-dots"></div>
+
+    <nav class="sidebar-nav">
+      <button class="snav-btn active" onclick="showTab('today')" data-tab="today">
+        <span class="snav-icon">☀</span> Today
+      </button>
+      <button class="snav-btn" onclick="showTab('week')" data-tab="week">
+        <span class="snav-icon">📅</span> This week
+      </button>
+      <button class="snav-btn" onclick="showTab('problems')" data-tab="problems">
+        <span class="snav-icon">🧠</span> My 13 patterns
+      </button>
+      <button class="snav-btn" onclick="showTab('mantras')" data-tab="mantras">
+        <span class="snav-icon">✦</span> Mantras
+      </button>
+      <button class="snav-btn" onclick="showTab('insights')" data-tab="insights">
+        <span class="snav-icon">💡</span> Insights
+      </button>
+    </nav>
+
+    <div class="sidebar-date" id="s-date"></div>
+  </aside>
+
+  <!-- ═══ MOBILE TOP BAR ═══ -->
+  <div class="mobile-topbar">
+    <h1>Arav's <span>Mind</span></h1>
+    <div class="topbar-date" id="m-date-short"></div>
   </div>
 
-  <!-- Nav -->
-  <div class="nav-tabs">
-    <button class="tab-btn active" onclick="showTab('today')">Today</button>
-    <button class="tab-btn" onclick="showTab('week')">This week</button>
-    <button class="tab-btn" onclick="showTab('problems')">My 13 patterns</button>
-    <button class="tab-btn" onclick="showTab('mantras')">Mantras</button>
-    <button class="tab-btn" onclick="showTab('insights')">Insights</button>
-  </div>
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main class="main">
 
-  <!-- TODAY -->
-  <div id="tab-today" class="view active">
-    <div class="section-label">Week 1 · Day 1 · Overthinking</div>
-    <div class="day-card">
-      <div class="day-header">
-        <span class="day-badge">Day 1</span>
-        <span class="week-tag">Week 1 — Catching the loop</span>
+    <!-- Mobile streak -->
+    <div class="mobile-streak" id="mobile-streak-card">
+      <div class="streak-row">
+        <div class="streak-num" id="m-streak-num">1</div>
+        <div class="streak-lbl">day streak</div>
       </div>
-      <div class="day-title">Thought labelling</div>
-      <div class="day-desc">Before you can change anything, you need to notice it happening. Today is only about awareness — not fixing, not stopping. Just noticing. Two words do all the work: <em style="color:var(--terracotta)">"There it is."</em></div>
-
-      <div class="two-col">
-        <div class="mini-card">
-          <div class="mini-tag tag-concept">Concept</div>
-          <div class="mini-title">What it is</div>
-          <div class="mini-desc">You name what the thought is <em>doing</em> — not what it's saying. Replaying. Scripting. Decoding. One word creates distance.</div>
-        </div>
-        <div class="mini-card">
-          <div class="mini-tag tag-practice">Practice</div>
-          <div class="mini-title">The "there it is" method</div>
-          <div class="mini-desc">Catch the thought. Say "there it is. [label]." Return to something physical. Repeat without frustration.</div>
-        </div>
-      </div>
-
-      <div class="awareness-cue">
-        <div class="cue-label">Awareness cue for today</div>
-        <div class="cue-text">The moment you catch yourself replaying a conversation that already happened — say internally: <em>"There it is. Replaying."</em> That's it. No need to stop it. Just name it.</div>
-      </div>
-
-      <div class="section-label" style="margin-top: 4px;">Your labels for today</div>
-      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 16px;">
-        <span style="background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft)">Replaying</span>
-        <span style="background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft)">Scripting</span>
-        <span style="background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft)">Decoding</span>
-        <span style="background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft)">Performing</span>
-        <span style="background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft)">Checking closeness</span>
-        <span style="background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft)">Looping</span>
-      </div>
-
-      <div class="awareness-cue" style="border-color:var(--sage); background:rgba(122,140,110,0.08);">
-        <div class="cue-label" style="color:var(--sage)">Science behind it</div>
-        <div class="cue-text">Naming a mental state reduces its emotional intensity (Lieberman, UCLA 2007). Affect labelling activates the prefrontal cortex and reduces amygdala reactivity — literally calming the alarm by naming it.</div>
-      </div>
-
-      <div style="margin-top:16px;">
-        <button class="refresh-btn" onclick="markDayDone()">✓ Mark today as done</button>
-      </div>
+      <div class="streak-dots-row" id="m-streak-dots"></div>
     </div>
-  </div>
 
-  <!-- WEEK -->
-  <div id="tab-week" class="view">
-    <div class="section-label">Week 1 — Overthinking & overanalysis</div>
-    <div class="week-list">
-      <div class="week-item current done-day" onclick="showTab('today')">
-        <div class="day-num">1</div>
+    <!-- ── TODAY ── -->
+    <div id="tab-today" class="view active">
+      <div class="page-header">
         <div>
-          <div class="week-item-title">Thought labelling</div>
-          <div class="week-item-sub">The "there it is" method · CBT · Lieberman (2007)</div>
+          <div class="page-title">Today</div>
+          <div class="page-date" id="d-full-date"></div>
         </div>
-        <div class="week-item-arrow">→</div>
+        <div class="section-label" style="margin:0">Week 1 · Day 1</div>
       </div>
-      <div class="week-item" onclick="alert('Day 2 unlocks after Day 1. Come back tomorrow.')">
-        <div class="day-num">2</div>
-        <div>
-          <div class="week-item-title">Productive thinking vs rumination</div>
-          <div class="week-item-sub">The 1-question test that tells them apart instantly</div>
+
+      <div class="section-label">Week 1 · Day 1 · Overthinking</div>
+      <div class="day-card">
+        <div class="day-header">
+          <span class="day-badge">Day 1</span>
+          <span class="week-tag">Week 1 — Catching the loop</span>
         </div>
-        <div class="week-item-arrow">→</div>
-      </div>
-      <div class="week-item" onclick="alert('Day 3 coming soon. Keep going.')">
-        <div class="day-num">3</div>
-        <div>
-          <div class="week-item-title">Scheduled worry time</div>
-          <div class="week-item-sub">Counterintuitive but evidence-based · Borkovec (1983)</div>
+        <div class="day-title">Thought labelling</div>
+        <div class="day-desc">Before you can change anything, you need to notice it happening. Today is only about awareness — not fixing, not stopping. Just noticing. Two words do all the work: <em style="color:var(--terracotta)">"There it is."</em></div>
+
+        <div class="two-col">
+          <div class="mini-card">
+            <div class="mini-tag tag-concept">Concept</div>
+            <div class="mini-title">What it is</div>
+            <div class="mini-desc">You name what the thought is <em>doing</em> — not what it's saying. Replaying. Scripting. Decoding. One word creates distance.</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-tag tag-practice">Practice</div>
+            <div class="mini-title">The "there it is" method</div>
+            <div class="mini-desc">Catch the thought. Say "there it is. [label]." Return to something physical. Repeat without frustration.</div>
+          </div>
         </div>
-        <div class="week-item-arrow">→</div>
-      </div>
-      <div class="week-item" onclick="alert('Day 4 coming soon.')">
-        <div class="day-num">4</div>
-        <div>
-          <div class="week-item-title">Cognitive defusion</div>
-          <div class="week-item-sub">ACT-based · Seeing thoughts as events, not truths</div>
+
+        <div class="awareness-cue">
+          <div class="cue-label">Awareness cue for today</div>
+          <div class="cue-text">The moment you catch yourself replaying a conversation that already happened — say internally: <em>"There it is. Replaying."</em> That's it. No need to stop it. Just name it.</div>
         </div>
-        <div class="week-item-arrow">→</div>
-      </div>
-      <div class="week-item" onclick="alert('Day 5 coming soon.')">
-        <div class="day-num">5</div>
-        <div>
-          <div class="week-item-title">Uncertainty intolerance</div>
-          <div class="week-item-sub">Why the mind loops · What to do instead</div>
+
+        <div class="section-label" style="margin-top:4px;">Your labels for today</div>
+        <div class="pill-row">
+          <span class="pill">Replaying</span><span class="pill">Scripting</span>
+          <span class="pill">Decoding</span><span class="pill">Performing</span>
+          <span class="pill">Checking closeness</span><span class="pill">Looping</span>
         </div>
-        <div class="week-item-arrow">→</div>
-      </div>
-      <div class="week-item" onclick="alert('Day 6 coming soon.')">
-        <div class="day-num">6</div>
-        <div>
-          <div class="week-item-title">Attentional training</div>
-          <div class="week-item-sub">Wells' ATT method · Your attention is a muscle</div>
+
+        <div class="awareness-cue" style="border-color:var(--sage);background:rgba(122,140,110,0.08);">
+          <div class="cue-label" style="color:var(--sage)">Science behind it</div>
+          <div class="cue-text">Naming a mental state reduces its emotional intensity (Lieberman, UCLA 2007). Affect labelling activates the prefrontal cortex and reduces amygdala reactivity — literally calming the alarm by naming it.</div>
         </div>
-        <div class="week-item-arrow">→</div>
-      </div>
-      <div class="week-item" onclick="alert('Day 7 — Week 1 review coming soon.')">
-        <div class="day-num">7</div>
-        <div>
-          <div class="week-item-title">Week 1 review + what's next</div>
-          <div class="week-item-sub">Consolidate · Preview Week 2: scenario building</div>
-        </div>
-        <div class="week-item-arrow">→</div>
+
+        <button class="mark-btn" onclick="markDayDone()">✓ Mark today as done</button>
       </div>
     </div>
 
-    <div style="margin-top: 28px; padding: 20px 24px; background: var(--warm-white); border: 1px solid var(--border); border-radius: 14px;">
-      <div class="section-label">Weeks ahead</div>
-      <div style="display:flex; flex-direction:column; gap:10px;">
-        <div style="display:flex; gap:12px; align-items:center; opacity:0.5;">
-          <div style="width:28px;height:28px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--text-soft);flex-shrink:0;">2</div>
-          <div><div style="font-size:13px;font-weight:500;color:var(--text-dark)">Scenario building & mental movies</div><div style="font-size:12px;color:var(--text-muted)">Problems 8 — why the mind scripts futures</div></div>
+    <!-- ── WEEK ── -->
+    <div id="tab-week" class="view">
+      <div class="page-header">
+        <div class="page-title">This week</div>
+      </div>
+      <div class="section-label">Week 1 — Overthinking & overanalysis</div>
+      <div class="week-list">
+        <div class="week-item current done-day" onclick="showTab('today')">
+          <div class="day-num">1</div>
+          <div><div class="week-item-title">Thought labelling</div><div class="week-item-sub">The "there it is" method · CBT · Lieberman (2007)</div></div>
+          <div class="week-item-arrow">→</div>
         </div>
-        <div style="display:flex; gap:12px; align-items:center; opacity:0.4;">
-          <div style="width:28px;height:28px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--text-soft);flex-shrink:0;">3</div>
-          <div><div style="font-size:13px;font-weight:500;color:var(--text-dark)">Fear of abandonment & clinging</div><div style="font-size:12px;color:var(--text-muted)">Problems 5, 6, 13 — attachment patterns</div></div>
+        <div class="week-item" onclick="alert('Day 2 unlocks after Day 1. Come back tomorrow.')">
+          <div class="day-num">2</div>
+          <div><div class="week-item-title">Productive thinking vs rumination</div><div class="week-item-sub">The 1-question test that tells them apart instantly</div></div>
+          <div class="week-item-arrow">→</div>
         </div>
-        <div style="display:flex; gap:12px; align-items:center; opacity:0.3;">
-          <div style="width:28px;height:28px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--text-soft);flex-shrink:0;">4</div>
-          <div><div style="font-size:13px;font-weight:500;color:var(--text-dark)">Mood instability & emotional sensitivity</div><div style="font-size:12px;color:var(--text-muted)">Problems 1, 4, 11 — the nervous system</div></div>
+        <div class="week-item" onclick="alert('Day 3 coming soon.')">
+          <div class="day-num">3</div>
+          <div><div class="week-item-title">Scheduled worry time</div><div class="week-item-sub">Counterintuitive but evidence-based · Borkovec (1983)</div></div>
+          <div class="week-item-arrow">→</div>
+        </div>
+        <div class="week-item" onclick="alert('Day 4 coming soon.')">
+          <div class="day-num">4</div>
+          <div><div class="week-item-title">Cognitive defusion</div><div class="week-item-sub">ACT-based · Seeing thoughts as events, not truths</div></div>
+          <div class="week-item-arrow">→</div>
+        </div>
+        <div class="week-item" onclick="alert('Day 5 coming soon.')">
+          <div class="day-num">5</div>
+          <div><div class="week-item-title">Uncertainty intolerance</div><div class="week-item-sub">Why the mind loops · What to do instead</div></div>
+          <div class="week-item-arrow">→</div>
+        </div>
+        <div class="week-item" onclick="alert('Day 6 coming soon.')">
+          <div class="day-num">6</div>
+          <div><div class="week-item-title">Attentional training</div><div class="week-item-sub">Wells' ATT method · Your attention is a muscle</div></div>
+          <div class="week-item-arrow">→</div>
+        </div>
+        <div class="week-item" onclick="alert('Day 7 — Week 1 review coming soon.')">
+          <div class="day-num">7</div>
+          <div><div class="week-item-title">Week 1 review + what's next</div><div class="week-item-sub">Consolidate · Preview Week 2: scenario building</div></div>
+          <div class="week-item-arrow">→</div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- PROBLEMS -->
-  <div id="tab-problems" class="view">
-    <div class="section-label">Your 13 identified patterns</div>
-    <div class="problems-grid">
-      <div class="problem-card">
-        <div class="problem-num">Problem 1</div>
-        <div class="problem-name">Mood instability</div>
-        <div class="problem-quote">"My mood gets spoiled very fast over small things."</div>
-      </div>
-      <div class="problem-card">
-        <div class="problem-num">Problem 2 · Current focus</div>
-        <div class="problem-name" style="color:var(--terracotta)">Overthinking</div>
-        <div class="problem-quote">"I think too much about almost everything."</div>
-      </div>
-      <div class="problem-card">
-        <div class="problem-num">Problem 3</div>
-        <div class="problem-name">Isolation & emotional withdrawal</div>
-        <div class="problem-quote">"I avoid talking, speak less, and keep to myself."</div>
-      </div>
-      <div class="problem-card">
-        <div class="problem-num">Problem 4</div>
-        <div class="problem-name">Guilt after disappointing others</div>
-        <div class="problem-quote">"I feel very bad whenever I think I've hurt someone."</div>
-      </div>
-      <div class="problem-card">
-        <div class="problem-num">Problem 5</div>
-        <div class="problem-name">Compulsive message checking</div>
-        <div class="problem-quote">"I can't ignore messages even when I want to."</div>
-      </div>
-      <div class="problem-card">
-        <div class="problem-num">Problem 6</div>
-        <div class="problem-name">Clinging to relationships</div>
-        <div class="problem-quote">"I keep messaging out of fear of losing people."</div>
-      </div>
-      <div class="problem-card">
-        <div class="problem-num">Problem 7</div>
-        <div class="problem-name">Self-glorifying inner narratives</div>
-        <div class="problem-quote">"I imagine myself as the best, with others praising me."</div>
-      </div>
-      <div class="problem-card">
-        <div class="problem-num">Problem 8 · Current focus</div>
-        <div class="problem-name" style="color:var(--terracotta)">Scenario building</div>
-        <div class="problem-quote">"I create imaginary situations — conversations, futures."</div>
-      </div>
-      <div class="problem-card">
-        <div class="problem-num">Problem 9</div>
-        <div class="problem-name">Craving attention but rejecting it</div>
-        <div class="problem-quote">"I like attention but push it away when I get it."</div>
-      </div>
-      <div class="problem-card">
-        <div class="problem-num">Problem 10</div>
-        <div class="problem-name">Conflicted about relationships</div>
-        <div class="problem-quote">"I want a relationship but know I'm not ready."</div>
-      </div>
-      <div class="problem-card">
-        <div class="problem-num">Problem 11</div>
-        <div class="problem-name">Comfort in sadness</div>
-        <div class="problem-quote">"Sadness feels like my natural state sometimes."</div>
-      </div>
-      <div class="problem-card">
-        <div class="problem-num">Problem 12 · Current focus</div>
-        <div class="problem-name" style="color:var(--terracotta)">Constant overanalysis</div>
-        <div class="problem-quote">"I keep analysing everything nonstop."</div>
-      </div>
-      <div class="problem-card" style="grid-column: 1 / -1;">
-        <div class="problem-num">Problem 13</div>
-        <div class="problem-name">Hurt when not the first to know</div>
-        <div class="problem-quote">"I feel sad when friends share things with others before me."</div>
-      </div>
-    </div>
-
-    <div class="section-label">The 5 deeper themes</div>
-    <div class="themes-row">
-      <div class="theme-item">
-        <div class="theme-dot" style="background:var(--terracotta)"></div>
-        <div>
-          <div class="theme-title">Fear of abandonment & clinging</div>
-          <div class="theme-problems">Problems 5, 6, 13</div>
-          <div class="theme-desc">Love and closeness feel like they must be continuously earned and proven. The underlying belief: if I stop showing up, I disappear from their life.</div>
-        </div>
-      </div>
-      <div class="theme-item">
-        <div class="theme-dot" style="background:var(--amber)"></div>
-        <div>
-          <div class="theme-title">Need for validation & being seen</div>
-          <div class="theme-problems">Problems 7, 9, 13</div>
-          <div class="theme-desc">A quiet hunger to matter — to be recognised, chosen, remembered. Not ego. The longing of someone who hasn't always felt sufficiently visible.</div>
-        </div>
-      </div>
-      <div class="theme-item">
-        <div class="theme-dot" style="background:var(--clay)"></div>
-        <div>
-          <div class="theme-title">Emotional sensitivity & mood vulnerability</div>
-          <div class="theme-problems">Problems 1, 4, 11</div>
-          <div class="theme-desc">A highly attuned nervous system. Small things carry large emotional weight. This is the cost and the gift of deep feeling.</div>
-        </div>
-      </div>
-      <div class="theme-item">
-        <div class="theme-dot" style="background:var(--sage)"></div>
-        <div>
-          <div class="theme-title">Avoidance as self-protection</div>
-          <div class="theme-problems">Problems 3, 9, 10</div>
-          <div class="theme-desc">Retreating before being rejected — pulling away from connection, attention, or love before it can be taken away.</div>
-        </div>
-      </div>
-      <div class="theme-item">
-        <div class="theme-dot" style="background:var(--moss)"></div>
-        <div>
-          <div class="theme-title">Mind as both ally and adversary</div>
-          <div class="theme-problems">Problems 2, 8, 12</div>
-          <div class="theme-desc">A powerful analytical mind turned inward without rest. The same intelligence that helps you understand deeply also refuses to let simple things simply be.</div>
+      <div class="ahead-box">
+        <div class="section-label">Weeks ahead</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="ahead-item" style="opacity:0.5">
+            <div class="ahead-num">2</div>
+            <div><div class="ahead-title">Scenario building & mental movies</div><div class="ahead-sub">Problem 8 — why the mind scripts futures</div></div>
+          </div>
+          <div class="ahead-item" style="opacity:0.38">
+            <div class="ahead-num">3</div>
+            <div><div class="ahead-title">Fear of abandonment & clinging</div><div class="ahead-sub">Problems 5, 6, 13 — attachment patterns</div></div>
+          </div>
+          <div class="ahead-item" style="opacity:0.25">
+            <div class="ahead-num">4</div>
+            <div><div class="ahead-title">Mood instability & emotional sensitivity</div><div class="ahead-sub">Problems 1, 4, 11 — the nervous system</div></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div style="padding:16px 20px; background: var(--warm-white); border:1px solid var(--border); border-radius:12px; text-align:center;">
-      <div style="font-family:'Lora',serif; font-size:15px; font-style:italic; color:var(--text-soft); line-height:1.7;">You are not your patterns.<br>You are the one watching them.</div>
-    </div>
-  </div>
+    <!-- ── PROBLEMS ── -->
+    <div id="tab-problems" class="view">
+      <div class="page-header"><div class="page-title">My 13 patterns</div></div>
+      <div class="section-label">Your 13 identified patterns</div>
+      <div class="problems-grid">
+        <div class="problem-card"><div class="problem-num">Problem 1</div><div class="problem-name">Mood instability</div><div class="problem-quote">"My mood gets spoiled very fast over small things."</div></div>
+        <div class="problem-card"><div class="problem-num">Problem 2 · Current focus</div><div class="problem-name" style="color:var(--terracotta)">Overthinking</div><div class="problem-quote">"I think too much about almost everything."</div></div>
+        <div class="problem-card"><div class="problem-num">Problem 3</div><div class="problem-name">Isolation & emotional withdrawal</div><div class="problem-quote">"I avoid talking, speak less, and keep to myself."</div></div>
+        <div class="problem-card"><div class="problem-num">Problem 4</div><div class="problem-name">Guilt after disappointing others</div><div class="problem-quote">"I feel very bad whenever I think I've hurt someone."</div></div>
+        <div class="problem-card"><div class="problem-num">Problem 5</div><div class="problem-name">Compulsive message checking</div><div class="problem-quote">"I can't ignore messages even when I want to."</div></div>
+        <div class="problem-card"><div class="problem-num">Problem 6</div><div class="problem-name">Clinging to relationships</div><div class="problem-quote">"I keep messaging out of fear of losing people."</div></div>
+        <div class="problem-card"><div class="problem-num">Problem 7</div><div class="problem-name">Self-glorifying inner narratives</div><div class="problem-quote">"I imagine myself as the best, with others praising me."</div></div>
+        <div class="problem-card"><div class="problem-num">Problem 8 · Current focus</div><div class="problem-name" style="color:var(--terracotta)">Scenario building</div><div class="problem-quote">"I create imaginary situations — conversations, futures."</div></div>
+        <div class="problem-card"><div class="problem-num">Problem 9</div><div class="problem-name">Craving attention but rejecting it</div><div class="problem-quote">"I like attention but push it away when I get it."</div></div>
+        <div class="problem-card"><div class="problem-num">Problem 10</div><div class="problem-name">Conflicted about relationships</div><div class="problem-quote">"I want a relationship but know I'm not ready."</div></div>
+        <div class="problem-card"><div class="problem-num">Problem 11</div><div class="problem-name">Comfort in sadness</div><div class="problem-quote">"Sadness feels like my natural state sometimes."</div></div>
+        <div class="problem-card"><div class="problem-num">Problem 12 · Current focus</div><div class="problem-name" style="color:var(--terracotta)">Constant overanalysis</div><div class="problem-quote">"I keep analysing everything nonstop."</div></div>
+        <div class="problem-card" style="grid-column:1/-1"><div class="problem-num">Problem 13</div><div class="problem-name">Hurt when not the first to know</div><div class="problem-quote">"I feel sad when friends share things with others before me."</div></div>
+      </div>
 
-  <!-- MANTRAS -->
-  <div id="tab-mantras" class="view">
-    <div class="featured-mantra">
-      <div class="featured-label">Today's mantra</div>
-      <div class="featured-text" id="featured-mantra-text">"This feeling will pass. It is not who I am — it is just a wave."</div>
-      <div class="featured-problem" id="featured-mantra-problem">For: Mood instability</div>
-    </div>
-
-    <button class="refresh-btn" onclick="rotateFeatured()">↻ New mantra</button>
-
-    <div class="section-label">All 13 mantras — one for each pattern</div>
-    <div class="mantras-list">
-      <div class="mantra-card mc-1">
-        <div class="mantra-for">Mood instability</div>
-        <div class="mantra-text">"This feeling will pass. It is not who I am — it is just a wave."</div>
-        <div class="mantra-science">Use when: a small thing has suddenly shifted your mood and you feel guilty about it.</div>
+      <div class="section-label">The 5 deeper themes</div>
+      <div class="themes-row">
+        <div class="theme-item"><div class="theme-dot" style="background:var(--terracotta)"></div><div><div class="theme-title">Fear of abandonment & clinging</div><div class="theme-problems">Problems 5, 6, 13</div><div class="theme-desc">Love and closeness feel like they must be continuously earned. The underlying belief: if I stop showing up, I disappear from their life.</div></div></div>
+        <div class="theme-item"><div class="theme-dot" style="background:var(--amber)"></div><div><div class="theme-title">Need for validation & being seen</div><div class="theme-problems">Problems 7, 9, 13</div><div class="theme-desc">A quiet hunger to matter — to be recognised, chosen, remembered. Not ego. The longing of someone who hasn't always felt sufficiently visible.</div></div></div>
+        <div class="theme-item"><div class="theme-dot" style="background:var(--clay)"></div><div><div class="theme-title">Emotional sensitivity & mood vulnerability</div><div class="theme-problems">Problems 1, 4, 11</div><div class="theme-desc">A highly attuned nervous system. Small things carry large emotional weight. This is the cost and the gift of deep feeling.</div></div></div>
+        <div class="theme-item"><div class="theme-dot" style="background:var(--sage)"></div><div><div class="theme-title">Avoidance as self-protection</div><div class="theme-problems">Problems 3, 9, 10</div><div class="theme-desc">Retreating before being rejected — pulling away from connection, attention, or love before it can be taken away.</div></div></div>
+        <div class="theme-item"><div class="theme-dot" style="background:var(--moss)"></div><div><div class="theme-title">Mind as both ally and adversary</div><div class="theme-problems">Problems 2, 8, 12</div><div class="theme-desc">A powerful analytical mind turned inward without rest. The same intelligence that helps you understand deeply also refuses to let simple things simply be.</div></div></div>
       </div>
-      <div class="mantra-card mc-2">
-        <div class="mantra-for">Overthinking</div>
-        <div class="mantra-text">"Is this analysis helping me — or haunting me? Enough for now. Let it breathe."</div>
-        <div class="mantra-science">Use when: you've been turning the same thought over for the third time with no new conclusion.</div>
-      </div>
-      <div class="mantra-card mc-3">
-        <div class="mantra-for">Isolation & withdrawal</div>
-        <div class="mantra-text">"I don't have to explain everything. But I can send one message: I'm not okay right now, but I'll be back."</div>
-        <div class="mantra-science">Use when: you feel the pull to go completely silent and disappear.</div>
-      </div>
-      <div class="mantra-card mc-4">
-        <div class="mantra-for">Guilt after disappointing others</div>
-        <div class="mantra-text">"One moment doesn't define me. If it needs correction, I'll do it gently — not by erasing myself."</div>
-        <div class="mantra-science">Use when: you're replaying something you said and spiralling into guilt.</div>
-      </div>
-      <div class="mantra-card mc-1">
-        <div class="mantra-for">Compulsive message checking</div>
-        <div class="mantra-text">"Silence is not rejection. My pace is not a problem. Responsiveness is kind — but boundaries are sacred."</div>
-        <div class="mantra-science">Use when: you feel the urge to check or reply even though you don't want to.</div>
-      </div>
-      <div class="mantra-card mc-5">
-        <div class="mantra-for">Clinging to relationships</div>
-        <div class="mantra-text">"Before messaging, ask: am I doing this from connection — or from fear?"</div>
-        <div class="mantra-science">Use when: you're about to send a message driven by anxiety about losing someone.</div>
-      </div>
-      <div class="mantra-card mc-2">
-        <div class="mantra-for">Self-glorifying inner narratives</div>
-        <div class="mantra-text">"I am not here to impress the world. I am here to express myself honestly."</div>
-        <div class="mantra-science">Use when: you catch yourself in a mental movie where everyone finally sees how good you are.</div>
-      </div>
-      <div class="mantra-card mc-3">
-        <div class="mantra-for">Scenario building</div>
-        <div class="mantra-text">"Let life unfold — I don't always have to script it. Scenarios are weather passing through the sky of my mind."</div>
-        <div class="mantra-science">Use when: you're deep in an imagined future conversation or confrontation.</div>
-      </div>
-      <div class="mantra-card mc-4">
-        <div class="mantra-for">Craving attention but rejecting it</div>
-        <div class="mantra-text">"I can enjoy being seen without becoming dependent. I am worthy of presence."</div>
-        <div class="mantra-science">Use when: someone shows you care and you feel the urge to push it away.</div>
-      </div>
-      <div class="mantra-card mc-6">
-        <div class="mantra-for">Conflicted about relationships</div>
-        <div class="mantra-text">"I am lovable even in my waiting. Love will find me living — not chasing."</div>
-        <div class="mantra-science">Use when: longing for connection is tipping into frustration or forcing.</div>
-      </div>
-      <div class="mantra-card mc-5">
-        <div class="mantra-for">Comfort in sadness</div>
-        <div class="mantra-text">"Sadness is a visitor, not a home — even if I've lived in it for years."</div>
-        <div class="mantra-science">Use when: sadness feels safe and familiar and you notice yourself settling into it.</div>
-      </div>
-      <div class="mantra-card mc-1">
-        <div class="mantra-for">Constant overanalysis</div>
-        <div class="mantra-text">"Not everything is a riddle. Some moments want to be felt, not figured out."</div>
-        <div class="mantra-science">Use when: you're dissecting an experience instead of just being in it.</div>
-      </div>
-      <div class="mantra-card mc-2">
-        <div class="mantra-for">Hurt when not first to know</div>
-        <div class="mantra-text">"Their timing is not always a measure of my worth. Importance is not always measured in 'first to know'."</div>
-        <div class="mantra-science">Use when: a friend told someone else something before telling you.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- INSIGHTS -->
-  <div id="tab-insights" class="view">
-
-    <div class="section-label" id="insight-day-label">Today's insight</div>
-
-    <!-- Hero card — today's insight only, click to expand -->
-    <div class="insight-hero" id="insight-hero-card" onclick="openModal(todayInsight)">
-      <div class="insight-category-badge">
-        <div class="cat-dot"></div>
-        <span id="hero-cat">Psychology</span>
-      </div>
-      <div class="insight-hero-title" id="hero-title">Loading today's insight...</div>
-      <div class="insight-hero-body" id="hero-body"></div>
-      <div class="insight-hero-why"><strong>Why this matters:</strong> <span id="hero-why"></span></div>
-      <div style="margin-top:18px; font-size:12px; color:rgba(255,255,255,0.35); letter-spacing:0.04em;">Tap to read the full insight + practice →</div>
+      <div class="closing-quote"><p>You are not your patterns.<br>You are the one watching them.</p></div>
     </div>
 
-    <div style="display:flex; align-items:center; gap:10px; margin-bottom:28px;">
-      <div style="flex:1; height:1px; background:var(--border);"></div>
-      <div style="font-size:11px; color:var(--text-muted); letter-spacing:0.06em; text-transform:uppercase; white-space:nowrap;">Changes tomorrow</div>
-      <div style="flex:1; height:1px; background:var(--border);"></div>
+    <!-- ── MANTRAS ── -->
+    <div id="tab-mantras" class="view">
+      <div class="page-header"><div class="page-title">Mantras</div></div>
+      <div class="featured-mantra">
+        <div class="featured-label">Today's mantra</div>
+        <div class="featured-text" id="featured-mantra-text">"This feeling will pass. It is not who I am — it is just a wave."</div>
+        <div class="featured-problem" id="featured-mantra-problem">For: Mood instability</div>
+      </div>
+      <button class="refresh-btn" onclick="rotateFeatured()">↻ New mantra</button>
+      <div class="section-label">All 13 mantras — one for each pattern</div>
+      <div class="mantras-list">
+        <div class="mantra-card mc-1"><div class="mantra-for">Mood instability</div><div class="mantra-text">"This feeling will pass. It is not who I am — it is just a wave."</div><div class="mantra-science">Use when: a small thing has suddenly shifted your mood and you feel guilty about it.</div></div>
+        <div class="mantra-card mc-2"><div class="mantra-for">Overthinking</div><div class="mantra-text">"Is this analysis helping me — or haunting me? Enough for now. Let it breathe."</div><div class="mantra-science">Use when: you've been turning the same thought over for the third time with no new conclusion.</div></div>
+        <div class="mantra-card mc-3"><div class="mantra-for">Isolation & withdrawal</div><div class="mantra-text">"I don't have to explain everything. But I can send one message: I'm not okay right now, but I'll be back."</div><div class="mantra-science">Use when: you feel the pull to go completely silent and disappear.</div></div>
+        <div class="mantra-card mc-4"><div class="mantra-for">Guilt after disappointing others</div><div class="mantra-text">"One moment doesn't define me. If it needs correction, I'll do it gently — not by erasing myself."</div><div class="mantra-science">Use when: you're replaying something you said and spiralling into guilt.</div></div>
+        <div class="mantra-card mc-1"><div class="mantra-for">Compulsive message checking</div><div class="mantra-text">"Silence is not rejection. My pace is not a problem. Responsiveness is kind — but boundaries are sacred."</div><div class="mantra-science">Use when: you feel the urge to check or reply even though you don't want to.</div></div>
+        <div class="mantra-card mc-5"><div class="mantra-for">Clinging to relationships</div><div class="mantra-text">"Before messaging, ask: am I doing this from connection — or from fear?"</div><div class="mantra-science">Use when: you're about to send a message driven by anxiety about losing someone.</div></div>
+        <div class="mantra-card mc-2"><div class="mantra-for">Self-glorifying inner narratives</div><div class="mantra-text">"I am not here to impress the world. I am here to express myself honestly."</div><div class="mantra-science">Use when: you catch yourself in a mental movie where everyone finally sees how good you are.</div></div>
+        <div class="mantra-card mc-3"><div class="mantra-for">Scenario building</div><div class="mantra-text">"Let life unfold — I don't always have to script it. Scenarios are weather passing through the sky of my mind."</div><div class="mantra-science">Use when: you're deep in an imagined future conversation or confrontation.</div></div>
+        <div class="mantra-card mc-4"><div class="mantra-for">Craving attention but rejecting it</div><div class="mantra-text">"I can enjoy being seen without becoming dependent. I am worthy of presence."</div><div class="mantra-science">Use when: someone shows you care and you feel the urge to push it away.</div></div>
+        <div class="mantra-card mc-6"><div class="mantra-for">Conflicted about relationships</div><div class="mantra-text">"I am lovable even in my waiting. Love will find me living — not chasing."</div><div class="mantra-science">Use when: longing for connection is tipping into frustration or forcing.</div></div>
+        <div class="mantra-card mc-5"><div class="mantra-for">Comfort in sadness</div><div class="mantra-text">"Sadness is a visitor, not a home — even if I've lived in it for years."</div><div class="mantra-science">Use when: sadness feels safe and familiar and you notice yourself settling into it.</div></div>
+        <div class="mantra-card mc-1"><div class="mantra-for">Constant overanalysis</div><div class="mantra-text">"Not everything is a riddle. Some moments want to be felt, not figured out."</div><div class="mantra-science">Use when: you're dissecting an experience instead of just being in it.</div></div>
+        <div class="mantra-card mc-2"><div class="mantra-for">Hurt when not first to know</div><div class="mantra-text">"Their timing is not always a measure of my worth. Importance is not always measured in 'first to know'."</div><div class="mantra-science">Use when: a friend told someone else something before telling you.</div></div>
+      </div>
     </div>
 
-    <div class="section-label">All insights — browse anytime</div>
-    <div class="insights-grid" id="insights-grid"></div>
+    <!-- ── INSIGHTS ── -->
+    <div id="tab-insights" class="view">
+      <div class="page-header"><div class="page-title">Insights</div></div>
+      <div class="section-label" id="insight-day-label">Today's insight</div>
 
-  </div>
+      <div class="insight-hero" id="insight-hero-card" onclick="openModal(todayInsight)">
+        <div class="insight-cat-badge">
+          <div class="cdot"></div>
+          <span id="hero-cat">Psychology</span>
+        </div>
+        <div class="insight-hero-title" id="hero-title">Loading...</div>
+        <div class="insight-hero-body" id="hero-body"></div>
+        <div class="insight-hero-why"><strong>Why this matters:</strong> <span id="hero-why"></span></div>
+        <div class="tap-hint">Tap to read the full insight + practice →</div>
+      </div>
 
-  <!-- Modal -->
-  <div class="insight-modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-    <div class="insight-modal">
-      <button class="modal-close" onclick="closeModal()">✕</button>
-      <div class="modal-cat" id="modal-cat"></div>
-      <div class="modal-title" id="modal-title"></div>
-      <div class="modal-body" id="modal-body"></div>
-      <div class="modal-remember" id="modal-remember"></div>
+      <div class="changes-row">
+        <hr><span>Changes tomorrow</span><hr>
+      </div>
+
+      <div class="section-label">All insights — browse anytime</div>
+      <div class="insights-grid" id="insights-grid"></div>
     </div>
-  </div>
+
+  </main>
+
+  <!-- ═══ MOBILE BOTTOM NAV ═══ -->
+  <nav class="bottom-nav">
+    <button class="bnav-btn active" onclick="showTab('today')" data-tab="today">
+      <div class="bnav-icon">☀</div><div class="bnav-label">Today</div>
+    </button>
+    <button class="bnav-btn" onclick="showTab('week')" data-tab="week">
+      <div class="bnav-icon">📅</div><div class="bnav-label">Week</div>
+    </button>
+    <button class="bnav-btn" onclick="showTab('problems')" data-tab="problems">
+      <div class="bnav-icon">🧠</div><div class="bnav-label">Patterns</div>
+    </button>
+    <button class="bnav-btn" onclick="showTab('mantras')" data-tab="mantras">
+      <div class="bnav-icon">✦</div><div class="bnav-label">Mantras</div>
+    </button>
+    <button class="bnav-btn" onclick="showTab('insights')" data-tab="insights">
+      <div class="bnav-icon">💡</div><div class="bnav-label">Insights</div>
+    </button>
+  </nav>
 
 </div>
 
+<!-- ═══ MODAL ═══ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-cat" id="modal-cat"></div>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-remember" id="modal-remember"></div>
+  </div>
+</div>
+
 <script>
-  // Date
-  const d = new Date();
-  document.getElementById('today-date').textContent = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-
-  // Streak dots
-  const streak = parseInt(localStorage.getItem('arav_streak') || '1');
-  document.getElementById('streak-count').textContent = streak;
-  const dotsEl = document.getElementById('streak-dots');
-  const days = ['M','T','W','T','F','S','S'];
-  for (let i = 0; i < 7; i++) {
-    const g = document.createElement('div');
-    g.className = 'dot-group';
-    const dot = document.createElement('div');
-    dot.className = 'dot' + (i < streak - 1 ? ' done' : '') + (i === streak - 1 ? ' today' : '');
-    dot.textContent = i < streak - 1 ? '✓' : '';
-    const lbl = document.createElement('div');
-    lbl.className = 'dot-label';
-    lbl.textContent = days[i];
-    g.appendChild(dot);
-    g.appendChild(lbl);
-    dotsEl.appendChild(g);
-  }
-
-  // Tab switching
-  function showTab(tab) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + tab).classList.add('active');
-    document.querySelectorAll('.tab-btn')[['today','week','problems','mantras','insights'].indexOf(tab)].classList.add('active');
-  }
-
-  // Mark done
-  function markDayDone() {
-    const cur = parseInt(localStorage.getItem('arav_streak') || '1');
-    localStorage.setItem('arav_streak', cur + 1);
-    document.getElementById('streak-count').textContent = cur + 1;
-    alert('Well done, Arav. Day ' + cur + ' done. See you tomorrow.');
-  }
-
-  // ── INSIGHTS DATA ──────────────────────────────────────────────
   const insights = [
     {
       cat: 'Psychology', catClass: 'cat-psychology',
@@ -1552,75 +1102,134 @@
     }
   ];
 
-  // ── INSIGHTS ───────────────────────────────────────────────────
+  // ── DATES ──
+  const now = new Date();
+  const fullDate = now.toLocaleDateString('en-IN', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const shortDate = now.toLocaleDateString('en-IN', {day:'numeric',month:'short'});
+  const els = ['d-full-date','s-date'];
+  els.forEach(id => { const el = document.getElementById(id); if(el) el.textContent = fullDate; });
+  const mds = document.getElementById('m-date-short');
+  if(mds) mds.textContent = shortDate;
+
+  // ── STREAK ──
+  const streak = parseInt(localStorage.getItem('arav_streak') || '1');
+  const dayLabels = ['M','T','W','T','F','S','S'];
+
+  function buildDots(containerId, dotClass) {
+    const el = document.getElementById(containerId);
+    if(!el) return;
+    for(let i=0;i<7;i++){
+      const wrap = document.createElement('div');
+      wrap.className = 'sdot-wrap';
+      const dot = document.createElement('div');
+      dot.className = dotClass + (i < streak-1 ? ' done' : '') + (i === streak-1 ? ' today' : '');
+      dot.textContent = i < streak-1 ? '✓' : '';
+      const lbl = document.createElement('div');
+      lbl.className = 'sdot-lbl';
+      lbl.textContent = dayLabels[i];
+      wrap.appendChild(dot); wrap.appendChild(lbl);
+      el.appendChild(wrap);
+    }
+  }
+
+  ['s-streak-num','m-streak-num'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.textContent = streak;
+  });
+  buildDots('s-streak-dots', 'sdot');
+  buildDots('m-streak-dots', 'sdot');
+
+  // ── TAB SWITCHING ──
+  function showTab(tab) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    // Sidebar buttons
+    document.querySelectorAll('.snav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    // Bottom nav buttons
+    document.querySelectorAll('.bnav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    // Scroll main to top
+    document.querySelector('.main').scrollTo({top:0,behavior:'smooth'});
+  }
+
+  // ── MARK DONE ──
+  function markDayDone() {
+    const cur = parseInt(localStorage.getItem('arav_streak') || '1');
+    localStorage.setItem('arav_streak', cur + 1);
+    ['s-streak-num','m-streak-num'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.textContent = cur + 1;
+    });
+    alert('Well done, Arav. Day ' + cur + ' done. See you tomorrow.');
+  }
+
+  // ── INSIGHTS ──
   function getInsightOfDay() {
-    const start = new Date(2025, 0, 1);
-    const now = new Date();
-    const daysSinceStart = Math.floor((now - start) / 86400000);
-    return daysSinceStart % insights.length;
+    const start = new Date(2025,0,1);
+    const daysSince = Math.floor((now - start) / 86400000);
+    return daysSince % insights.length;
   }
 
   const todayIdx = getInsightOfDay();
   const todayInsight = insights[todayIdx];
 
-  // Render hero — today only
   (function renderHero() {
     const ins = todayInsight;
     document.getElementById('hero-cat').textContent = ins.cat;
     document.getElementById('hero-title').textContent = ins.title;
     document.getElementById('hero-body').textContent = ins.body;
     document.getElementById('hero-why').textContent = ins.why;
-    // Label with actual date
-    const dateStr = new Date().toLocaleDateString('en-IN', { day:'numeric', month:'long' });
+    const dateStr = now.toLocaleDateString('en-IN',{day:'numeric',month:'long'});
     document.getElementById('insight-day-label').textContent = 'Today\'s insight — ' + dateStr;
   })();
 
-  // Render grid — all insights, today's card highlighted
   (function renderGrid() {
     const grid = document.getElementById('insights-grid');
     insights.forEach((ins, i) => {
       const isToday = i === todayIdx;
       const card = document.createElement('div');
       card.className = 'ins-card ' + ins.catClass + (isToday ? ' ins-today' : '');
-      card.innerHTML = `
-        ${isToday ? '<div class="ins-today-badge">Today</div>' : ''}
-        <div class="ins-cat">${ins.cat}</div>
-        <div class="ins-title">${ins.title}</div>
-        <div class="ins-preview">${ins.body.substring(0, 72)}...</div>
-      `;
+      card.innerHTML = (isToday ? '<div class="ins-today-badge">Today</div>' : '') +
+        '<div class="ins-cat">' + ins.cat + '</div>' +
+        '<div class="ins-title">' + ins.title + '</div>' +
+        '<div class="ins-preview">' + ins.body.substring(0,72) + '...</div>';
       card.onclick = () => openModal(ins);
       grid.appendChild(card);
     });
   })();
 
-  // Modal
+  // ── MODAL ──
+  const catColors = {
+    'cat-psychology':'var(--terracotta)', 'cat-neuroscience':'var(--moss)',
+    'cat-behaviour':'var(--amber)', 'cat-listening':'var(--sage)',
+    'cat-observation':'var(--clay)', 'cat-emotional':'var(--rust)'
+  };
+
   function openModal(ins) {
     document.getElementById('modal-cat').textContent = ins.cat;
-    document.getElementById('modal-cat').style.color = ins.catClass === 'cat-psychology' ? 'var(--terracotta)' :
-      ins.catClass === 'cat-neuroscience' ? 'var(--moss)' :
-      ins.catClass === 'cat-behaviour' ? 'var(--amber)' :
-      ins.catClass === 'cat-listening' ? 'var(--sage)' :
-      ins.catClass === 'cat-observation' ? 'var(--clay)' : 'var(--rust)';
+    document.getElementById('modal-cat').style.color = catColors[ins.catClass] || 'var(--terracotta)';
     document.getElementById('modal-title').textContent = ins.title;
     document.getElementById('modal-body').textContent = ins.body;
     document.getElementById('modal-remember').innerHTML = ins.remember;
     document.getElementById('modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
 
   function closeModal(e) {
-    if (!e || e.target === document.getElementById('modal-overlay') || e.currentTarget.classList.contains('modal-close')) {
+    if (!e || e.target === document.getElementById('modal-overlay') ||
+        (e.currentTarget && e.currentTarget.classList.contains('modal-close'))) {
       document.getElementById('modal-overlay').classList.remove('open');
+      document.body.style.overflow = '';
     }
   }
+
+  // ── MANTRAS ──
   const mantras = [
-    { text: '"This feeling will pass. It is not who I am — it is just a wave."', problem: 'For: Mood instability' },
-    { text: '"Is this analysis helping me — or haunting me? Enough for now. Let it breathe."', problem: 'For: Overthinking' },
-    { text: '"Before messaging, ask: am I doing this from connection — or from fear?"', problem: 'For: Clinging to relationships' },
-    { text: '"Let life unfold — I don\'t always have to script it."', problem: 'For: Scenario building' },
-    { text: '"Sadness is a visitor, not a home — even if I\'ve lived in it for years."', problem: 'For: Comfort in sadness' },
-    { text: '"Not everything is a riddle. Some moments want to be felt, not figured out."', problem: 'For: Constant overanalysis' },
-    { text: '"I am lovable even in my waiting. Love will find me living — not chasing."', problem: 'For: Conflicted about relationships' },
-    { text: '"I can enjoy being seen without becoming dependent. I am worthy of presence."', problem: 'For: Craving attention' },
+    {text:'"This feeling will pass. It is not who I am — it is just a wave."', problem:'For: Mood instability'},
+    {text:'"Is this analysis helping me — or haunting me? Enough for now. Let it breathe."', problem:'For: Overthinking'},
+    {text:'"Before messaging, ask: am I doing this from connection — or from fear?"', problem:'For: Clinging to relationships'},
+    {text:'"Let life unfold — I don\'t always have to script it."', problem:'For: Scenario building'},
+    {text:'"Sadness is a visitor, not a home — even if I\'ve lived in it for years."', problem:'For: Comfort in sadness'},
+    {text:'"Not everything is a riddle. Some moments want to be felt, not figured out."', problem:'For: Constant overanalysis'},
+    {text:'"I am lovable even in my waiting. Love will find me living — not chasing."', problem:'For: Conflicted about relationships'},
+    {text:'"I can enjoy being seen without becoming dependent. I am worthy of presence."', problem:'For: Craving attention'},
   ];
   let mantraIdx = 0;
   function rotateFeatured() {
