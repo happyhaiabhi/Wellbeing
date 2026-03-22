@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abhi's Mind — Daily Wellness</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --warm-white: #FAF7F2;
+    --sand: #E8DFD0;
+    --clay: #C4A882;
+    --terracotta: #B5714A;
+    --rust: #8B4513;
+    --bark: #5C3D2E;
+    --sage: #7A8C6E;
+    --sage-light: #A8B99A;
+    --moss: #4A5C3F;
+    --amber: #C17F3A;
+    --amber-light: #E8C48A;
+    --text-dark: #2C1F14;
+    --text-mid: #5C4033;
+    --text-soft: #8B7355;
+    --text-muted: #A69070;
+    --border: rgba(139, 115, 85, 0.2);
+    --border-strong: rgba(139, 115, 85, 0.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .page { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* Header */
+  header {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .header-left h1 {
+    font-family: 'Lora', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--text-dark);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+
+  .header-left h1 span {
+    color: var(--terracotta);
+    font-style: italic;
+  }
+
+  .header-left p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    letter-spacing: 0.03em;
+  }
+
+  .header-right {
+    text-align: right;
+  }
+
+  .date-display {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Streak bar */
+  .streak-section {
+    background: var(--bark);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .streak-section::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+
+  .streak-number {
+    font-family: 'Lora', serif;
+    font-size: 56px;
+    font-weight: 600;
+    color: var(--amber-light);
+    line-height: 1;
+  }
+
+  .streak-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  .streak-dots {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  .dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    position: relative;
+  }
+
+  .dot.done {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+  }
+
+  .dot.today {
+    border-color: var(--amber-light);
+    color: var(--amber-light);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .dot-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  .dot-group { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232,196,138,0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(232,196,138,0); }
+  }
+
+  /* Nav tabs */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--sand);
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 32px;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 10px 16px;
+    border: none;
+    background: transparent;
+    border-radius: 9px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn.active {
+    background: var(--warm-white);
+    color: var(--text-dark);
+    font-weight: 500;
+    box-shadow: 0 1px 4px rgba(92,61,46,0.12);
+  }
+
+  .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.5); }
+
+  /* Views */
+  .view { display: none; animation: fadeIn 0.3s ease; }
+  .view.active { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Section label */
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  /* Daily learning card */
+  .day-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .day-badge {
+    background: var(--terracotta);
+    color: white;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    padding: 4px 12px;
+    border-radius: 999px;
+    text-transform: uppercase;
+  }
+
+  .week-tag {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .day-title {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .day-desc {
+    font-size: 14px;
+    color: var(--text-soft);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+
+  .mini-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mini-card:hover { border-color: var(--clay); transform: translateY(-1px); }
+
+  .mini-tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .tag-concept { color: var(--terracotta); }
+  .tag-practice { color: var(--sage); }
+
+  .mini-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+  }
+
+  .mini-desc { font-size: 12px; color: var(--text-soft); line-height: 1.6; }
+
+  /* Awareness cue */
+  .awareness-cue {
+    border-left: 3px solid var(--amber);
+    padding: 14px 18px;
+    background: rgba(193,127,58,0.08);
+    border-radius: 0 10px 10px 0;
+    margin-bottom: 20px;
+  }
+
+  .cue-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+
+  .cue-text {
+    font-size: 14px;
+    color: var(--text-dark);
+    line-height: 1.7;
+  }
+
+  .cue-text em { font-style: italic; color: var(--terracotta); }
+
+  /* Week days list */
+  .week-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .week-item {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .week-item:hover { border-color: var(--clay); background: var(--sand); }
+
+  .week-item.current { border-color: var(--terracotta); background: rgba(181,113,74,0.06); }
+
+  .day-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--sand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-soft);
+    flex-shrink: 0;
+  }
+
+  .week-item.current .day-num {
+    background: var(--terracotta);
+    color: white;
+  }
+
+  .week-item.done-day .day-num {
+    background: var(--sage);
+    color: white;
+  }
+
+  .week-item-title { font-size: 14px; font-weight: 500; color: var(--text-dark); }
+  .week-item-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .week-item-arrow { margin-left: auto; color: var(--text-muted); font-size: 16px; }
+
+  /* Problems grid */
+  .problems-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
+
+  .problem-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .problem-card:hover { border-color: var(--clay); transform: translateY(-1px); }
+
+  .problem-num {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+
+  .problem-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .problem-quote {
+    font-size: 12px;
+    color: var(--text-soft);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* Themes */
+  .themes-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+
+  .theme-item {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .theme-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .theme-title { font-size: 14px; font-weight: 500; color: var(--text-dark); margin-bottom: 4px; }
+  .theme-problems { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .theme-desc { font-size: 13px; color: var(--text-soft); line-height: 1.6; }
+
+  /* Mantras */
+  .mantras-list { display: flex; flex-direction: column; gap: 14px; }
+
+  .mantra-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    transition: all 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mantra-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 14px 0 0 14px;
+  }
+
+  .mantra-card:hover { transform: translateX(3px); }
+
+  .mantra-for {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .mantra-text {
+    font-family: 'Lora', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--text-dark);
+    line-height: 1.6;
+  }
+
+  .mantra-science {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* Accentcolors for mantra cards */
+  .mc-1::before { background: var(--terracotta); }
+  .mc-2::before { background: var(--sage); }
+  .mc-3::before { background: var(--amber); }
+  .mc-4::before { background: var(--clay); }
+  .mc-5::before { background: var(--moss); }
+  .mc-6::before { background: var(--rust); }
+
+  /* Today's mantra highlight */
+  .featured-mantra {
+    background: var(--bark);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .featured-mantra::before {
+    content: '"';
+    position: absolute;
+    top: -10px; right: 20px;
+    font-family: 'Lora', serif;
+    font-size: 120px;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+  }
+
+  .featured-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber-light);
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+
+  .featured-text {
+    font-family: 'Lora', serif;
+    font-size: 19px;
+    font-style: italic;
+    color: white;
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+
+  .featured-problem {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* Refresh button */
+  .refresh-btn {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 20px;
+  }
+
+  .refresh-btn:hover { background: var(--sand); color: var(--text-dark); }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .two-col { grid-template-columns: 1fr; }
+    .problems-grid { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .streak-section { flex-direction: column; align-items: flex-start; }
+    .streak-dots { justify-content: flex-start; }
+    .tab-btn { font-size: 11px; padding: 9px 10px; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--clay); border-radius: 3px; }
+
+  /* Insights */
+  .insight-hero {
+    background: var(--bark);
+    border-radius: 20px;
+    padding: 36px 36px 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .insight-hero:hover { transform: translateY(-2px); }
+  .insight-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; right: -30px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .insight-hero::before {
+    content: '';
+    position: absolute;
+    top: -20px; left: -20px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+  .insight-category-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 999px;
+    padding: 4px 12px;
+    margin-bottom: 16px;
+  }
+  .insight-category-badge .cat-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--amber-light);
+  }
+  .insight-category-badge span {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+  }
+  .insight-hero-title {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: white;
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+  .insight-hero-body {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .insight-hero-why {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .insight-hero-why strong {
+    color: var(--amber-light);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  .insight-nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .insight-counter {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+  .insight-nav-btns { display: flex; gap: 8px; }
+  .ins-nav-btn {
+    background: var(--warm-white);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 7px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .ins-nav-btn:hover { background: var(--sand); color: var(--text-dark); }
+
+  .insights-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .ins-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .ins-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 14px 14px 0 0;
+  }
+  .ins-card:hover { border-color: var(--clay); transform: translateY(-2px); }
+  .ins-cat {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    margin-bottom: 8px;
+    margin-top: 6px;
+  }
+  .ins-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-dark);
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+  .ins-preview {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .cat-psychology::before { background: var(--terracotta); }
+  .cat-psychology .ins-cat { color: var(--terracotta); }
+  .cat-neuroscience::before { background: var(--moss); }
+  .cat-neuroscience .ins-cat { color: var(--moss); }
+  .cat-behaviour::before { background: var(--amber); }
+  .cat-behaviour .ins-cat { color: var(--amber); }
+  .cat-listening::before { background: var(--sage); }
+  .cat-listening .ins-cat { color: var(--sage); }
+  .cat-observation::before { background: var(--clay); }
+  .cat-observation .ins-cat { color: var(--clay); }
+  .cat-emotional::before { background: var(--rust); }
+  .cat-emotional .ins-cat { color: var(--rust); }
+
+  .insight-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(44,31,20,0.6);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .insight-modal-overlay.open { display: flex; }
+  .insight-modal {
+    background: var(--warm-white);
+    border-radius: 20px;
+    padding: 32px;
+    max-width: 520px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    animation: modalIn 0.25s ease;
+  }
+  @keyframes modalIn { from { opacity:0; transform:scale(0.95) translateY(10px); } to { opacity:1; transform:none; } }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: var(--sand);
+    border: none;
+    border-radius: 50%;
+    width: 30px; height: 30px;
+    font-size: 16px;
+    color: var(--text-soft);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .modal-close:hover { background: var(--clay); color: white; }
+  .modal-cat {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    margin-bottom: 12px;
+  }
+  .modal-title {
+    font-family: 'Lora', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-dark);
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+  .modal-body {
+    font-size: 14px;
+    color: var(--text-soft);
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+  .modal-remember {
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text-dark);
+    line-height: 1.7;
+    border-left: 3px solid var(--terracotta);
+  }
+  .modal-remember strong { color: var(--terracotta); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <header>
+    <div class="header-left">
+      <h1>Arav's <span>Mind</span></h1>
+      <p>A personal space for honest self-growth · one day at a time</p>
+    </div>
+    <div class="header-right">
+      <div class="date-display" id="today-date"></div>
+    </div>
+  </header>
+
+  <!-- Streak -->
+  <div class="streak-section">
+    <div>
+      <div class="streak-number" id="streak-count">1</div>
+      <div class="streak-label">Day streak</div>
+    </div>
+    <div class="streak-dots" id="streak-dots"></div>
+  </div>
+
+  <!-- Nav -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('today')">Today</button>
+    <button class="tab-btn" onclick="showTab('week')">This week</button>
+    <button class="tab-btn" onclick="showTab('problems')">My 13 patterns</button>
+    <button class="tab-btn" onclick="showTab('mantras')">Mantras</button>
+    <button class="tab-btn" onclick="showTab('insights')">Insights</button>
+  </div>
+
+  <!-- TODAY -->
+  <div id="tab-today" class="view active">
+    <div class="section-label">Week 1 · Day 1 · Overthinking</div>
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-badge">Day 1</span>
+        <span class="week-tag">Week 1 — Catching the loop</span>
+      </div>
+      <div class="day-title">Thought labelling</div>
+      <div class="day-desc">Before you can change anything, you need to notice it happening. Today is only about awareness — not fixing, not stopping. Just noticing. Two words do all the work: <em style="color:var(--terracotta)">"There it is."</em></div>
+
+      <div class="two-col">
+        <div class="mini-card">
+          <div class="mini-tag tag-concept">Concept</div>
+          <div class="mini-title">What it is</div>
+          <div class="mini-desc">You name what the thought is <em>doing</em> — not what it's saying. Replaying. Scripting. Decoding. One word creates distance.</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-tag tag-practice">Practice</div>
+          <div class="mini-title">The "there it is" method</div>
+          <div class="mini-desc">Catch the thought. Say "there it is. [label]." Return to something physical. Repeat without frustration.</div>
+        </div>
+      </div>
+
+      <div class="awareness-cue">
+        <div class="cue-label">Awareness cue for today</div>
+        <div class="cue-text">The moment you catch yourself replaying a conversation that already happened — say internally: <em>"There it is. Replaying."</em> That's it. No need to stop it. Just name it.</div>
+      </div>
+
+      <div class="section-label" style="margin-top: 4px;">Your labels for today</div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 16px;">
+        <span style="background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft)">Replaying</span>
+        <span style="background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft)">Scripting</span>
+        <span style="background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft)">Decoding</span>
+        <span style="background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft)">Performing</span>
+        <span style="background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft)">Checking closeness</span>
+        <span style="background:var(--sand);border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--text-soft)">Looping</span>
+      </div>
+
+      <div class="awareness-cue" style="border-color:var(--sage); background:rgba(122,140,110,0.08);">
+        <div class="cue-label" style="color:var(--sage)">Science behind it</div>
+        <div class="cue-text">Naming a mental state reduces its emotional intensity (Lieberman, UCLA 2007). Affect labelling activates the prefrontal cortex and reduces amygdala reactivity — literally calming the alarm by naming it.</div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <button class="refresh-btn" onclick="markDayDone()">✓ Mark today as done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK -->
+  <div id="tab-week" class="view">
+    <div class="section-label">Week 1 — Overthinking & overanalysis</div>
+    <div class="week-list">
+      <div class="week-item current done-day" onclick="showTab('today')">
+        <div class="day-num">1</div>
+        <div>
+          <div class="week-item-title">Thought labelling</div>
+          <div class="week-item-sub">The "there it is" method · CBT · Lieberman (2007)</div>
+        </div>
+        <div class="week-item-arrow">→</div>
+      </div>
+      <div class="week-item" onclick="alert('Day 2 unlocks after Day 1. Come back tomorrow.')">
+        <div class="day-num">2</div>
+        <div>
+          <div class="week-item-title">Productive thinking vs rumination</div>
+          <div class="week-item-sub">The 1-question test that tells them apart instantly</div>
+        </div>
+        <div class="week-item-arrow">→</div>
+      </div>
+      <div class="week-item" onclick="alert('Day 3 coming soon. Keep going.')">
+        <div class="day-num">3</div>
+        <div>
+          <div class="week-item-title">Scheduled worry time</div>
+          <div class="week-item-sub">Counterintuitive but evidence-based · Borkovec (1983)</div>
+        </div>
+        <div class="week-item-arrow">→</div>
+      </div>
+      <div class="week-item" onclick="alert('Day 4 coming soon.')">
+        <div class="day-num">4</div>
+        <div>
+          <div class="week-item-title">Cognitive defusion</div>
+          <div class="week-item-sub">ACT-based · Seeing thoughts as events, not truths</div>
+        </div>
+        <div class="week-item-arrow">→</div>
+      </div>
+      <div class="week-item" onclick="alert('Day 5 coming soon.')">
+        <div class="day-num">5</div>
+        <div>
+          <div class="week-item-title">Uncertainty intolerance</div>
+          <div class="week-item-sub">Why the mind loops · What to do instead</div>
+        </div>
+        <div class="week-item-arrow">→</div>
+      </div>
+      <div class="week-item" onclick="alert('Day 6 coming soon.')">
+        <div class="day-num">6</div>
+        <div>
+          <div class="week-item-title">Attentional training</div>
+          <div class="week-item-sub">Wells' ATT method · Your attention is a muscle</div>
+        </div>
+        <div class="week-item-arrow">→</div>
+      </div>
+      <div class="week-item" onclick="alert('Day 7 — Week 1 review coming soon.')">
+        <div class="day-num">7</div>
+        <div>
+          <div class="week-item-title">Week 1 review + what's next</div>
+          <div class="week-item-sub">Consolidate · Preview Week 2: scenario building</div>
+        </div>
+        <div class="week-item-arrow">→</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 28px; padding: 20px 24px; background: var(--warm-white); border: 1px solid var(--border); border-radius: 14px;">
+      <div class="section-label">Weeks ahead</div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; gap:12px; align-items:center; opacity:0.5;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--text-soft);flex-shrink:0;">2</div>
+          <div><div style="font-size:13px;font-weight:500;color:var(--text-dark)">Scenario building & mental movies</div><div style="font-size:12px;color:var(--text-muted)">Problems 8 — why the mind scripts futures</div></div>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center; opacity:0.4;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--text-soft);flex-shrink:0;">3</div>
+          <div><div style="font-size:13px;font-weight:500;color:var(--text-dark)">Fear of abandonment & clinging</div><div style="font-size:12px;color:var(--text-muted)">Problems 5, 6, 13 — attachment patterns</div></div>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center; opacity:0.3;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--text-soft);flex-shrink:0;">4</div>
+          <div><div style="font-size:13px;font-weight:500;color:var(--text-dark)">Mood instability & emotional sensitivity</div><div style="font-size:12px;color:var(--text-muted)">Problems 1, 4, 11 — the nervous system</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEMS -->
+  <div id="tab-problems" class="view">
+    <div class="section-label">Your 13 identified patterns</div>
+    <div class="problems-grid">
+      <div class="problem-card">
+        <div class="problem-num">Problem 1</div>
+        <div class="problem-name">Mood instability</div>
+        <div class="problem-quote">"My mood gets spoiled very fast over small things."</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 2 · Current focus</div>
+        <div class="problem-name" style="color:var(--terracotta)">Overthinking</div>
+        <div class="problem-quote">"I think too much about almost everything."</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 3</div>
+        <div class="problem-name">Isolation & emotional withdrawal</div>
+        <div class="problem-quote">"I avoid talking, speak less, and keep to myself."</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 4</div>
+        <div class="problem-name">Guilt after disappointing others</div>
+        <div class="problem-quote">"I feel very bad whenever I think I've hurt someone."</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 5</div>
+        <div class="problem-name">Compulsive message checking</div>
+        <div class="problem-quote">"I can't ignore messages even when I want to."</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 6</div>
+        <div class="problem-name">Clinging to relationships</div>
+        <div class="problem-quote">"I keep messaging out of fear of losing people."</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 7</div>
+        <div class="problem-name">Self-glorifying inner narratives</div>
+        <div class="problem-quote">"I imagine myself as the best, with others praising me."</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 8 · Current focus</div>
+        <div class="problem-name" style="color:var(--terracotta)">Scenario building</div>
+        <div class="problem-quote">"I create imaginary situations — conversations, futures."</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 9</div>
+        <div class="problem-name">Craving attention but rejecting it</div>
+        <div class="problem-quote">"I like attention but push it away when I get it."</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 10</div>
+        <div class="problem-name">Conflicted about relationships</div>
+        <div class="problem-quote">"I want a relationship but know I'm not ready."</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 11</div>
+        <div class="problem-name">Comfort in sadness</div>
+        <div class="problem-quote">"Sadness feels like my natural state sometimes."</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">Problem 12 · Current focus</div>
+        <div class="problem-name" style="color:var(--terracotta)">Constant overanalysis</div>
+        <div class="problem-quote">"I keep analysing everything nonstop."</div>
+      </div>
+      <div class="problem-card" style="grid-column: 1 / -1;">
+        <div class="problem-num">Problem 13</div>
+        <div class="problem-name">Hurt when not the first to know</div>
+        <div class="problem-quote">"I feel sad when friends share things with others before me."</div>
+      </div>
+    </div>
+
+    <div class="section-label">The 5 deeper themes</div>
+    <div class="themes-row">
+      <div class="theme-item">
+        <div class="theme-dot" style="background:var(--terracotta)"></div>
+        <div>
+          <div class="theme-title">Fear of abandonment & clinging</div>
+          <div class="theme-problems">Problems 5, 6, 13</div>
+          <div class="theme-desc">Love and closeness feel like they must be continuously earned and proven. The underlying belief: if I stop showing up, I disappear from their life.</div>
+        </div>
+      </div>
+      <div class="theme-item">
+        <div class="theme-dot" style="background:var(--amber)"></div>
+        <div>
+          <div class="theme-title">Need for validation & being seen</div>
+          <div class="theme-problems">Problems 7, 9, 13</div>
+          <div class="theme-desc">A quiet hunger to matter — to be recognised, chosen, remembered. Not ego. The longing of someone who hasn't always felt sufficiently visible.</div>
+        </div>
+      </div>
+      <div class="theme-item">
+        <div class="theme-dot" style="background:var(--clay)"></div>
+        <div>
+          <div class="theme-title">Emotional sensitivity & mood vulnerability</div>
+          <div class="theme-problems">Problems 1, 4, 11</div>
+          <div class="theme-desc">A highly attuned nervous system. Small things carry large emotional weight. This is the cost and the gift of deep feeling.</div>
+        </div>
+      </div>
+      <div class="theme-item">
+        <div class="theme-dot" style="background:var(--sage)"></div>
+        <div>
+          <div class="theme-title">Avoidance as self-protection</div>
+          <div class="theme-problems">Problems 3, 9, 10</div>
+          <div class="theme-desc">Retreating before being rejected — pulling away from connection, attention, or love before it can be taken away.</div>
+        </div>
+      </div>
+      <div class="theme-item">
+        <div class="theme-dot" style="background:var(--moss)"></div>
+        <div>
+          <div class="theme-title">Mind as both ally and adversary</div>
+          <div class="theme-problems">Problems 2, 8, 12</div>
+          <div class="theme-desc">A powerful analytical mind turned inward without rest. The same intelligence that helps you understand deeply also refuses to let simple things simply be.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:16px 20px; background: var(--warm-white); border:1px solid var(--border); border-radius:12px; text-align:center;">
+      <div style="font-family:'Lora',serif; font-size:15px; font-style:italic; color:var(--text-soft); line-height:1.7;">You are not your patterns.<br>You are the one watching them.</div>
+    </div>
+  </div>
+
+  <!-- MANTRAS -->
+  <div id="tab-mantras" class="view">
+    <div class="featured-mantra">
+      <div class="featured-label">Today's mantra</div>
+      <div class="featured-text" id="featured-mantra-text">"This feeling will pass. It is not who I am — it is just a wave."</div>
+      <div class="featured-problem" id="featured-mantra-problem">For: Mood instability</div>
+    </div>
+
+    <button class="refresh-btn" onclick="rotateFeatured()">↻ New mantra</button>
+
+    <div class="section-label">All 13 mantras — one for each pattern</div>
+    <div class="mantras-list">
+      <div class="mantra-card mc-1">
+        <div class="mantra-for">Mood instability</div>
+        <div class="mantra-text">"This feeling will pass. It is not who I am — it is just a wave."</div>
+        <div class="mantra-science">Use when: a small thing has suddenly shifted your mood and you feel guilty about it.</div>
+      </div>
+      <div class="mantra-card mc-2">
+        <div class="mantra-for">Overthinking</div>
+        <div class="mantra-text">"Is this analysis helping me — or haunting me? Enough for now. Let it breathe."</div>
+        <div class="mantra-science">Use when: you've been turning the same thought over for the third time with no new conclusion.</div>
+      </div>
+      <div class="mantra-card mc-3">
+        <div class="mantra-for">Isolation & withdrawal</div>
+        <div class="mantra-text">"I don't have to explain everything. But I can send one message: I'm not okay right now, but I'll be back."</div>
+        <div class="mantra-science">Use when: you feel the pull to go completely silent and disappear.</div>
+      </div>
+      <div class="mantra-card mc-4">
+        <div class="mantra-for">Guilt after disappointing others</div>
+        <div class="mantra-text">"One moment doesn't define me. If it needs correction, I'll do it gently — not by erasing myself."</div>
+        <div class="mantra-science">Use when: you're replaying something you said and spiralling into guilt.</div>
+      </div>
+      <div class="mantra-card mc-1">
+        <div class="mantra-for">Compulsive message checking</div>
+        <div class="mantra-text">"Silence is not rejection. My pace is not a problem. Responsiveness is kind — but boundaries are sacred."</div>
+        <div class="mantra-science">Use when: you feel the urge to check or reply even though you don't want to.</div>
+      </div>
+      <div class="mantra-card mc-5">
+        <div class="mantra-for">Clinging to relationships</div>
+        <div class="mantra-text">"Before messaging, ask: am I doing this from connection — or from fear?"</div>
+        <div class="mantra-science">Use when: you're about to send a message driven by anxiety about losing someone.</div>
+      </div>
+      <div class="mantra-card mc-2">
+        <div class="mantra-for">Self-glorifying inner narratives</div>
+        <div class="mantra-text">"I am not here to impress the world. I am here to express myself honestly."</div>
+        <div class="mantra-science">Use when: you catch yourself in a mental movie where everyone finally sees how good you are.</div>
+      </div>
+      <div class="mantra-card mc-3">
+        <div class="mantra-for">Scenario building</div>
+        <div class="mantra-text">"Let life unfold — I don't always have to script it. Scenarios are weather passing through the sky of my mind."</div>
+        <div class="mantra-science">Use when: you're deep in an imagined future conversation or confrontation.</div>
+      </div>
+      <div class="mantra-card mc-4">
+        <div class="mantra-for">Craving attention but rejecting it</div>
+        <div class="mantra-text">"I can enjoy being seen without becoming dependent. I am worthy of presence."</div>
+        <div class="mantra-science">Use when: someone shows you care and you feel the urge to push it away.</div>
+      </div>
+      <div class="mantra-card mc-6">
+        <div class="mantra-for">Conflicted about relationships</div>
+        <div class="mantra-text">"I am lovable even in my waiting. Love will find me living — not chasing."</div>
+        <div class="mantra-science">Use when: longing for connection is tipping into frustration or forcing.</div>
+      </div>
+      <div class="mantra-card mc-5">
+        <div class="mantra-for">Comfort in sadness</div>
+        <div class="mantra-text">"Sadness is a visitor, not a home — even if I've lived in it for years."</div>
+        <div class="mantra-science">Use when: sadness feels safe and familiar and you notice yourself settling into it.</div>
+      </div>
+      <div class="mantra-card mc-1">
+        <div class="mantra-for">Constant overanalysis</div>
+        <div class="mantra-text">"Not everything is a riddle. Some moments want to be felt, not figured out."</div>
+        <div class="mantra-science">Use when: you're dissecting an experience instead of just being in it.</div>
+      </div>
+      <div class="mantra-card mc-2">
+        <div class="mantra-for">Hurt when not first to know</div>
+        <div class="mantra-text">"Their timing is not always a measure of my worth. Importance is not always measured in 'first to know'."</div>
+        <div class="mantra-science">Use when: a friend told someone else something before telling you.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div id="tab-insights" class="view">
+
+    <!-- Hero card — today's insight -->
+    <div class="insight-hero" onclick="openModal(todayInsight)">
+      <div class="insight-category-badge">
+        <div class="cat-dot"></div>
+        <span id="hero-cat">Psychology</span>
+      </div>
+      <div class="insight-hero-title" id="hero-title">Loading today's insight...</div>
+      <div class="insight-hero-body" id="hero-body"></div>
+      <div class="insight-hero-why"><strong>Why this matters:</strong> <span id="hero-why"></span></div>
+    </div>
+
+    <div class="insight-nav-row">
+      <div class="insight-counter"><span id="ins-idx">1</span> of <span id="ins-total">40</span> insights</div>
+      <div class="insight-nav-btns">
+        <button class="ins-nav-btn" onclick="prevInsight()">← Prev</button>
+        <button class="ins-nav-btn" onclick="nextInsight()">Next →</button>
+      </div>
+    </div>
+
+    <div class="section-label">Browse all insights</div>
+    <div class="insights-grid" id="insights-grid"></div>
+
+  </div>
+
+  <!-- Modal -->
+  <div class="insight-modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+    <div class="insight-modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-cat" id="modal-cat"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-remember" id="modal-remember"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Date
+  const d = new Date();
+  document.getElementById('today-date').textContent = d.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+  // Streak dots
+  const streak = parseInt(localStorage.getItem('arav_streak') || '1');
+  document.getElementById('streak-count').textContent = streak;
+  const dotsEl = document.getElementById('streak-dots');
+  const days = ['M','T','W','T','F','S','S'];
+  for (let i = 0; i < 7; i++) {
+    const g = document.createElement('div');
+    g.className = 'dot-group';
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i < streak - 1 ? ' done' : '') + (i === streak - 1 ? ' today' : '');
+    dot.textContent = i < streak - 1 ? '✓' : '';
+    const lbl = document.createElement('div');
+    lbl.className = 'dot-label';
+    lbl.textContent = days[i];
+    g.appendChild(dot);
+    g.appendChild(lbl);
+    dotsEl.appendChild(g);
+  }
+
+  // Tab switching
+  function showTab(tab) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.querySelectorAll('.tab-btn')[['today','week','problems','mantras','insights'].indexOf(tab)].classList.add('active');
+  }
+
+  // Mark done
+  function markDayDone() {
+    const cur = parseInt(localStorage.getItem('arav_streak') || '1');
+    localStorage.setItem('arav_streak', cur + 1);
+    document.getElementById('streak-count').textContent = cur + 1;
+    alert('Well done, Arav. Day ' + cur + ' done. See you tomorrow.');
+  }
+
+  // ── INSIGHTS DATA ──────────────────────────────────────────────
+  const insights = [
+    {
+      cat: 'Psychology', catClass: 'cat-psychology',
+      title: 'You have two minds: the fast one and the slow one',
+      body: 'Psychologist Daniel Kahneman identified two systems of thinking. System 1 is fast, automatic, emotional — it jumps to conclusions instantly. System 2 is slow, deliberate, logical — it requires effort to engage. Most of our reactions, judgments, and feelings come from System 1, which means they feel true but aren\'t always accurate.',
+      why: 'When you\'re instantly convinced someone is upset with you from one short reply — that\'s System 1. Before acting on it, pause and ask System 2 to weigh in.',
+      remember: '<strong>Try this:</strong> When you feel certain about something emotional, ask: "Is this System 1 reacting, or do I actually have evidence?" That 3-second pause is System 2 waking up.'
+    },
+    {
+      cat: 'Neuroscience', catClass: 'cat-neuroscience',
+      title: 'Your brain predicts reality before it experiences it',
+      body: 'Neuroscientist Lisa Feldman Barrett\'s research shows the brain is not a passive receiver — it\'s an active prediction machine. Your brain constantly generates expectations about what\'s coming, and only updates when something doesn\'t match. This means what you "experience" is largely your brain\'s best guess, shaped by memory and past patterns.',
+      why: 'You don\'t experience people as they are — you experience your brain\'s prediction of them. When you\'re convinced someone is pulling away, you may be experiencing a past pattern, not current reality.',
+      remember: '<strong>Notice:</strong> The next time you feel certain about how someone is feeling, ask — "Am I reading what\'s here, or predicting what I\'ve seen before?"'
+    },
+    {
+      cat: 'Behavioural Science', catClass: 'cat-behaviour',
+      title: 'We remember how things end, not how they were',
+      body: 'The Peak-End Rule, discovered by Kahneman, shows that people judge an experience almost entirely by how it felt at its most intense moment and how it ended — not the average across the whole experience. A good conversation that ended awkwardly will feel worse in memory than it actually was.',
+      why: 'If a good interaction ends on a slightly off note, your memory of the whole thing gets coloured by that ending. You may be judging relationships and people based on this distortion.',
+      remember: '<strong>Awareness:</strong> When you\'re replaying an interaction that felt bad — ask: was the whole thing bad, or just the ending?'
+    },
+    {
+      cat: 'How to listen', catClass: 'cat-listening',
+      title: 'Real listening means listening to understand, not to respond',
+      body: 'Most people listen to formulate their reply. The moment someone begins speaking, the inner monologue starts: "How do I respond? What\'s my angle? What does this mean for me?" Real listening — what psychologist Carl Rogers called "active listening" — means suspending your own reactions and genuinely trying to understand what the other person is experiencing.',
+      why: 'When you\'re in a conversation, notice how quickly your mind moves to your own response. The faster it moves, the less you\'re actually hearing the other person.',
+      remember: '<strong>Practice:</strong> In your next conversation, let the other person finish fully before your mind even starts composing a reply. You\'ll be surprised how different people sound when you actually hear them.'
+    },
+    {
+      cat: 'Observation', catClass: 'cat-observation',
+      title: 'Most of communication is happening below the words',
+      body: 'Research by psychologist Albert Mehrabian showed that when feelings and attitudes are being communicated, 55% comes from body language, 38% from tone of voice, and only 7% from words. While these numbers don\'t apply to all communication, the principle holds: words are the surface; energy, pace, posture, and breath are the substance.',
+      why: 'You already know this intuitively — you can tell when someone says "I\'m fine" and means the opposite. Trust that knowing. The body doesn\'t lie the way words can.',
+      remember: '<strong>Observe:</strong> In your next conversation, notice what the person\'s body and tone are saying separately from their words. Let both inform how you respond.'
+    },
+    {
+      cat: 'Emotional Intelligence', catClass: 'cat-emotional',
+      title: 'Emotions are data, not commands',
+      body: 'Psychologist Susan David, in her research on emotional agility, distinguishes between emotions as information versus emotions as instructions. Most people either suppress emotions (pretend they\'re not there) or obey them (act on every feeling). A third path exists: feeling the emotion, naming it, understanding what it\'s pointing to, and then choosing how to respond.',
+      why: 'When your mood drops suddenly, your emotion is giving you information — about what you value, what you fear, what you need. It\'s not telling you what to do. You decide that.',
+      remember: '<strong>Ask:</strong> "What is this feeling trying to tell me?" — not "What should I do about this feeling?" The first question makes you curious. The second makes you reactive.'
+    },
+    {
+      cat: 'Behavioural Science', catClass: 'cat-behaviour',
+      title: 'The spotlight effect: no one is watching you as much as you think',
+      body: 'Psychologists Thomas Gilovich and Kenneth Savitsky discovered that people dramatically overestimate how much others notice and remember their appearance, mistakes, and behaviour. In one study, people wearing embarrassing shirts thought 50% of others would notice — in reality, fewer than 25% did. This gap exists because we\'re always at the centre of our own experience, so we assume we\'re at the centre of everyone else\'s too.',
+      why: 'A lot of anxiety and self-consciousness comes from imagining everyone is tracking you. They\'re mostly in their own spotlight, worrying about themselves.',
+      remember: '<strong>Remember:</strong> That thing you said that you\'ve replayed seven times — the other person has probably not thought about it once since it happened.'
+    },
+    {
+      cat: 'Neuroscience', catClass: 'cat-neuroscience',
+      title: 'Your nervous system can be trained to feel safer',
+      body: 'The autonomic nervous system has two main modes: sympathetic (fight/flight/freeze — activated by perceived threat) and parasympathetic (rest and digest — activated by safety). Most people with anxiety, overthinking, and mood sensitivity are spending too much time in the sympathetic state. The good news: slow, deep exhalations directly activate the parasympathetic nervous system through the vagus nerve.',
+      why: 'The body has a built-in off switch for the stress response. It\'s your breath — specifically, exhaling longer than you inhale.',
+      remember: '<strong>Practice:</strong> Inhale for 4 counts, exhale for 6. Do this 3 times. This is physiologically calming — not metaphorically. It works on the nervous system directly.'
+    },
+    {
+      cat: 'Psychology', catClass: 'cat-psychology',
+      title: 'Negative emotions are not signs that something is wrong with you',
+      body: 'Psychologist Paul Ekman\'s research identified six universal emotions across all cultures: happiness, sadness, fear, disgust, anger, and surprise. Every single one has a survival function. Sadness signals a loss that matters. Anger signals a boundary being crossed. Fear signals a potential threat. None of them are malfunctions — they\'re the mind doing its job.',
+      why: 'You feel guilty when you\'re sad "for no reason." But the emotion is not a mistake. The question isn\'t why you feel it — it\'s what it\'s pointing you toward.',
+      remember: '<strong>Shift:</strong> Next time a negative emotion arrives, instead of "why am I feeling this?", try "what is this protecting or pointing toward?"'
+    },
+    {
+      cat: 'How to listen', catClass: 'cat-listening',
+      title: 'Silence in conversation is not emptiness — it\'s space',
+      body: 'Most people are deeply uncomfortable with silence and rush to fill it. In therapy, skilled practitioners know that silence after someone shares something meaningful is often where the most important thinking happens. Silence gives the other person room to go deeper, correct themselves, or say the thing they weren\'t sure they could say.',
+      why: 'When someone goes quiet mid-conversation, it doesn\'t mean the conversation is failing. It often means something real is being processed. Your job is to hold the space, not fill it.',
+      remember: '<strong>Practice:</strong> After someone shares something, count to three silently before responding. You\'ll often find they have more to say — and what comes next is usually more honest.'
+    },
+    {
+      cat: 'Behavioural Science', catClass: 'cat-behaviour',
+      title: 'We are wired to remember threats more than rewards',
+      body: 'This is called negativity bias — the brain\'s tendency to register, remember, and dwell on negative experiences more strongly than equally positive ones. Rick Hanson, neuropsychologist, describes it as: "The brain is like Velcro for negative experiences and Teflon for positive ones." This evolved for survival — one mistake with a predator is fatal, so the brain over-indexes on threats.',
+      why: 'One cold message, one awkward interaction, one moment of being overlooked — and your brain treats it like evidence of something much larger. It isn\'t. It\'s just the bias doing its job.',
+      remember: '<strong>Counter it:</strong> When something good happens — a moment of connection, a kind word, a small win — pause for 15–20 seconds and let it land. This is how you slowly rewire the Teflon.'
+    },
+    {
+      cat: 'Emotional Intelligence', catClass: 'cat-emotional',
+      title: 'People with high empathy feel others\' emotions in their own body',
+      body: 'Mirror neurons — brain cells that fire both when you do something and when you watch someone else do it — are part of what makes empathy physical. Highly empathic people often physically feel others\' emotional states: tension in a room, sadness in a voice, restlessness in someone\'s energy. This is a form of social intelligence, not weakness.',
+      why: 'Your high sensitivity to emotional cues is not a flaw in your wiring. It\'s a feature. The work is learning to distinguish: is this mine, or am I picking up someone else\'s frequency?',
+      remember: '<strong>Ask:</strong> "Is what I\'m feeling right now coming from inside me — or am I absorbing what\'s around me?" That question alone creates useful distance.'
+    },
+    {
+      cat: 'Observation', catClass: 'cat-observation',
+      title: 'Curiosity is the highest form of attention',
+      body: 'Psychologist Todd Kashdan\'s research on curiosity shows that curious people have richer social lives, more meaningful connections, and better emotional wellbeing. Curiosity means approaching something — a person, a moment, an emotion — with genuine interest rather than judgment or analysis. It\'s the difference between asking "what\'s wrong with this?" and "what\'s actually happening here?"',
+      why: 'You already have a powerful analytical mind. Adding curiosity to it transforms it from a machine that judges to one that discovers. The same intelligence, different orientation.',
+      remember: '<strong>Shift:</strong> The next time you catch yourself analysing something, try replacing the question "what does this mean?" with "what\'s actually here?" It moves you from judgment to observation.'
+    },
+    {
+      cat: 'Neuroscience', catClass: 'cat-neuroscience',
+      title: 'Sleep is when your brain files its emotional records',
+      body: 'During REM sleep, the brain reprocesses emotional experiences — essentially replaying them without the stress chemicals (norepinephrine is suppressed during REM). This is the brain\'s natural emotional regulation system. Matthew Walker\'s research at UC Berkeley shows that sleep deprivation makes the amygdala 60% more reactive to negative stimuli. Poor sleep literally makes everything harder to handle.',
+      why: 'If you\'re going to bed with your mind running and waking up already tense — your brain never got to file away the previous day\'s emotional weight. It compounds.',
+      remember: '<strong>Small thing:</strong> A consistent wind-down 30 minutes before sleep — no screens, no heavy conversations — is not a luxury. It\'s maintenance for your emotional regulation system.'
+    },
+    {
+      cat: 'Psychology', catClass: 'cat-psychology',
+      title: 'Attachment style is not destiny — it\'s a starting point',
+      body: 'John Bowlby\'s attachment theory (later extended by Mary Ainsworth) shows that early experiences with caregivers shape our fundamental beliefs about relationships: are people reliable? Am I worthy of love? Is closeness safe? Anxious attachment (fear of abandonment, clinging) and avoidant attachment (pushing love away) are both adaptive strategies learned in childhood — not permanent character flaws.',
+      why: 'The patterns you see in yourself — clinging, checking, fearing distance — make complete sense given what the nervous system learned early on. Awareness alone begins to change them.',
+      remember: '<strong>Know this:</strong> You can have an anxious attachment style and still build secure, loving relationships. Knowing your style is the beginning of choosing something different.'
+    },
+    {
+      cat: 'How to listen', catClass: 'cat-listening',
+      title: 'The most powerful listening question is "what else?"',
+      body: 'Coaching research by Michael Bungay Stanier shows that the question "what else?" is one of the most powerful tools in conversation. It signals: I\'m not done listening. I want more. Most people stop at the first thing someone shares — which is often not the most important thing. What someone says first is usually the safe version. What comes after "what else?" is usually the real thing.',
+      why: 'When you ask someone how they\'re doing and they say "fine" — "what else?" or "what\'s actually going on?" opens a completely different conversation. People feel more seen when you go one layer deeper.',
+      remember: '<strong>Use it:</strong> In your next real conversation, after someone answers your first question, ask "what else?" or "tell me more." Then listen without preparing your next question.'
+    },
+    {
+      cat: 'Behavioural Science', catClass: 'cat-behaviour',
+      title: 'Small consistent actions change identity — not big dramatic ones',
+      body: 'James Clear\'s synthesis of behaviour research shows that identity change happens through small, repeated actions — not one-time breakthroughs. Every time you do something, you cast a vote for the kind of person you are. Doing it once proves nothing. Doing it 20 times across weeks starts building a new self-concept. "I am someone who notices my thoughts" is built one small labelling moment at a time.',
+      why: 'The goal isn\'t to fix everything in a week. The goal is to make one small choice, slightly differently, today. That\'s the only unit of change that actually works.',
+      remember: '<strong>One vote:</strong> Every time you label a thought instead of drowning in it, you vote for: "I am someone who observes their mind." 50 votes from now, that\'s who you\'ll be.'
+    },
+    {
+      cat: 'Emotional Intelligence', catClass: 'cat-emotional',
+      title: 'You cannot logic your way out of an emotional state',
+      body: 'The prefrontal cortex (reasoning) and the amygdala (emotion) have an asymmetric relationship. When the amygdala is highly activated — during anxiety, fear, or emotional flooding — it literally reduces blood flow to the prefrontal cortex. Trying to think your way out of a strong emotion doesn\'t work because the part of the brain you\'re trying to use is temporarily offline.',
+      why: 'When you\'re in a mood spiral and you try to reason yourself out of it and it doesn\'t work — it\'s not a failure of intelligence. It\'s physiology. The body needs to calm before the mind can think.',
+      remember: '<strong>First move:</strong> When you\'re emotionally flooded, don\'t reason — regulate. Breathe slowly. Move your body. Splash cold water on your face. Get the nervous system down first. Then think.'
+    },
+    {
+      cat: 'Observation', catClass: 'cat-observation',
+      title: 'Most people reveal who they are in how they treat small things',
+      body: 'Psychologist Dan McAdams, who studies personality narratives, notes that character is most visible not in big dramatic moments but in small, unobserved ones: how someone talks about a person who can\'t hear them, how they treat a waiter, how they respond when they think no one is watching. These micro-moments are far more reliable indicators of character than first impressions or self-presentation.',
+      why: 'When you want to understand someone — watch them in ordinary, low-stakes moments. The person they are when nothing is at stake is closer to the person they actually are.',
+      remember: '<strong>Observe:</strong> Watch how people talk about others when those others aren\'t present. Watch how they respond to small inconveniences. That\'s data.'
+    },
+    {
+      cat: 'Psychology', catClass: 'cat-psychology',
+      title: 'The gap between stimulus and response is where your freedom lives',
+      body: 'Viktor Frankl, psychiatrist and Holocaust survivor, wrote: "Between stimulus and response there is a space. In that space is our power to choose our response. In our response lies our growth and our freedom." This is not wishful thinking — neuroscience confirms there is a measurable gap between when we perceive something and when we react. The practice is learning to notice and use that gap.',
+      why: 'You don\'t have to be at the mercy of every emotional trigger. The gap is always there. The work is simply making it longer, one conscious moment at a time.',
+      remember: '<strong>The pause:</strong> Between the trigger and the reaction — even 2 seconds of conscious breath — is where you stop being automatic and start being intentional.'
+    },
+    {
+      cat: 'Neuroscience', catClass: 'cat-neuroscience',
+      title: 'Dopamine is about anticipation, not pleasure',
+      body: 'Neuroscientist Robert Sapolsky\'s research overturned a common myth: dopamine is not the "pleasure chemical." It\'s the anticipation chemical. Dopamine fires most strongly just before an expected reward — in the wanting, not the getting. This is why checking a phone for messages feels compelling: the unpredictable, variable reward schedule (sometimes a message, sometimes nothing) is exactly what triggers maximum dopamine release.',
+      why: 'That compulsive message checking isn\'t a personal weakness. It\'s the same neurological mechanism as slot machines. The unpredictability is the hook.',
+      remember: '<strong>Know the mechanism:</strong> The urge to check isn\'t about caring — it\'s about dopamine seeking certainty. You can care about people without servicing the loop every time it fires.'
+    },
+    {
+      cat: 'How to listen', catClass: 'cat-listening',
+      title: 'Listening is not the same as waiting to speak',
+      body: 'Research by Ralph Nichols, who pioneered listening studies, found that people typically listen at 25% efficiency — meaning we immediately forget, misunderstand, or distort 75% of what we hear. The main culprit: we think 4 times faster than people speak, so our minds race ahead — judging, planning, drifting. Real listening requires consciously slowing the inner monologue down to match the speaker\'s pace.',
+      why: 'If you\'ve ever felt unheard or like people aren\'t really listening to you — notice whether you offer others what you wish you received.',
+      remember: '<strong>Practice:</strong> When listening, instead of thinking about your response, summarise what the person just said in your head first. "They\'re saying..." This keeps the mind on them, not on you.'
+    },
+    {
+      cat: 'Emotional Intelligence', catClass: 'cat-emotional',
+      title: 'Loneliness is not about being alone — it\'s about feeling unseen',
+      body: 'Researcher Vivek Murthy defines loneliness not as the absence of people but as the experience of feeling unknown or unseen in your relationships. You can be surrounded by people and feel profoundly lonely if no one truly sees you — your real thoughts, fears, and inner world. Conversely, one person who truly sees you can dissolve loneliness entirely.',
+      why: 'Some of your drive to be seen, to be the first to know, to matter to people — is directly connected to this. The need is real and human. The work is finding ways to be seen that don\'t cost you your self-respect.',
+      remember: '<strong>Reflect:</strong> Is there one person in your life who actually sees you — not the version you present, but you? If yes, invest there. If no, that\'s the most important thing to work toward.'
+    },
+    {
+      cat: 'Behavioural Science', catClass: 'cat-behaviour',
+      title: 'Our choices are heavily shaped by how options are framed',
+      body: 'Tversky and Kahneman\'s framing effect shows that identical choices presented differently produce opposite decisions. People choose differently between "90% survival rate" and "10% death rate" — even though they\'re mathematically identical. Our decisions are rarely purely rational; they\'re profoundly shaped by context, language, and what we\'re comparing to.',
+      why: 'The story you tell about a situation shapes how you experience it. "They didn\'t tell me first" (framed as neglect) and "they\'re living their life and shared with me later" (framed as normal) are the same event.',
+      remember: '<strong>Ask:</strong> "Is there another equally true way to frame this?" There almost always is. You don\'t have to believe the most painful version by default.'
+    },
+    {
+      cat: 'Observation', catClass: 'cat-observation',
+      title: 'What you notice about others reveals what\'s alive in you',
+      body: 'Projection is a psychological concept first described by Freud and refined by later theorists: we often see in others what we haven\'t fully acknowledged in ourselves. But its mirror is also true — what consistently draws your attention, what you admire or envy or judge in others, is often pointing to something significant inside you. What you notice is a map of your interior.',
+      why: 'If you frequently notice whether people are being recognised or overlooked — that lens is telling you something about your own hunger to be seen.',
+      remember: '<strong>Use it:</strong> When you feel a strong reaction to something someone else did or received, ask: "What does the strength of this reaction tell me about myself?"'
+    },
+    {
+      cat: 'Psychology', catClass: 'cat-psychology',
+      title: 'Self-compassion is not self-indulgence — it\'s the foundation of growth',
+      body: 'Kristin Neff\'s research on self-compassion shows that people who treat themselves kindly after failure actually try harder, recover faster, and take more personal responsibility — not less. The counterintuitive finding: self-criticism does not motivate; it activates the threat system and makes change harder. Self-compassion activates the care system and makes change possible.',
+      why: 'The critical inner voice that tells you you\'re too much, too sensitive, too needy — is not making you better. It\'s keeping you stuck. You don\'t earn the right to change by hating where you are.',
+      remember: '<strong>Try:</strong> When you notice yourself spiralling in self-criticism, ask: "What would I say to a close friend who was feeling exactly this?" Then say that to yourself.'
+    },
+    {
+      cat: 'Neuroscience', catClass: 'cat-neuroscience',
+      title: 'Chronic overthinking physically exhausts the brain',
+      body: 'The brain uses approximately 20% of the body\'s total energy despite being only 2% of body weight. The default mode network — active during rumination, self-reflection, and mind-wandering — is one of the most metabolically expensive networks. Chronic overthinking isn\'t just psychologically draining; it creates measurable physical fatigue, impairs decision-making, and reduces working memory capacity.',
+      why: 'That deep tiredness you feel after a day of overthinking — even when you haven\'t physically done anything — is real. Your brain was running at high metabolic cost all day.',
+      remember: '<strong>Recovery:</strong> Activities that quiet the default mode network — focused physical movement, music you love, absorbing creative work — are not distractions. They\'re brain maintenance.'
+    },
+    {
+      cat: 'How to listen', catClass: 'cat-listening',
+      title: 'People don\'t always want advice — they want to be understood',
+      body: 'Research by Bren\u00e9 Brown on empathy shows that what people most often need when they share something painful is not a solution but the experience of not being alone in it. Jumping to advice — even good advice — can inadvertently signal: "your problem needs fixing" rather than "you are worth sitting with." The question "do you want me to listen or help you solve this?" is one of the most respectful things you can ask.',
+      why: 'When you share something and people immediately offer advice, it can feel dismissive — like they couldn\'t tolerate just being with you in the difficulty. You probably know this feeling.',
+      remember: '<strong>Ask first:</strong> "Do you want me to just listen, or would it help to think through it together?" Most people have never been asked. It changes everything.'
+    },
+    {
+      cat: 'Emotional Intelligence', catClass: 'cat-emotional',
+      title: 'Vulnerability is not weakness — it\'s the only path to real connection',
+      body: 'Brené Brown\'s decade of research on shame and vulnerability found that people who experience deep belonging and connection share one quality: they are willing to be seen. Not performing strength. Not managing impressions. Actually allowing others to see their uncertainty, fear, and longing. Connection is the result of being known — and being known requires the risk of being seen.',
+      why: 'You want deep connection. You also protect yourself fiercely from being seen. Both are true. The tension between them is the core thing to work with.',
+      remember: '<strong>One step:</strong> You don\'t have to be fully vulnerable with everyone. Start with one person where it feels slightly safer than usual. Say one true thing you wouldn\'t normally say.'
+    },
+    {
+      cat: 'Behavioural Science', catClass: 'cat-behaviour',
+      title: 'The Zeigarnik effect: unfinished things stay louder in the mind',
+      body: 'Psychologist Bluma Zeigarnik discovered that the brain naturally keeps incomplete tasks and unresolved situations in active memory — returning to them repeatedly until they\'re resolved or deliberately closed. This is why unresolved conversations, unsent messages, and ambiguous situations loop in your mind: the brain is keeping them open, waiting for closure.',
+      why: 'A lot of your rumination is the Zeigarnik effect in action. The mind keeps returning to the unresolved thing not because it\'s important — but because it\'s unfinished.',
+      remember: '<strong>Close the loop:</strong> For mental open loops, writing them down (even a single sentence) or consciously deciding "I\'m choosing not to resolve this now" gives the brain permission to release the loop.'
+    },
+    {
+      cat: 'Observation', catClass: 'cat-observation',
+      title: 'How someone responds to small frustrations tells you more than how they treat you on good days',
+      body: 'Psychologist Walter Mischel, famous for the marshmallow test, spent decades studying self-regulation. His work, alongside personality research, consistently shows that stable character traits emerge most clearly under mild stress — not in ideal circumstances. Anyone can be patient and kind when everything is going well. The telling moment is a small inconvenience, a minor disappointment, an unexpected change.',
+      why: 'You, too, are more visible in your patterns when things go slightly wrong. Not as a flaw — as information. Your patterns under mild stress are your nervous system\'s default response.',
+      remember: '<strong>Observe:</strong> Notice — without judgment — how you respond the next time something small doesn\'t go as planned. That response is your most honest data.'
+    },
+    {
+      cat: 'Psychology', catClass: 'cat-psychology',
+      title: 'Emotion regulation is a skill — and all skills improve with practice',
+      body: 'James Gross at Stanford has spent 30 years researching emotion regulation strategies. His core finding: the ability to manage emotional responses is not a fixed trait — it\'s a trainable skill. People who regulate emotions well aren\'t less emotional; they\'ve developed the capacity to notice, name, and work with their emotions without being overwhelmed by them. This capacity grows with deliberate practice.',
+      why: 'Emotional sensitivity is not the problem. The absence of regulation skills is what makes it painful. Those skills are learnable — which is exactly what you\'re doing.',
+      remember: '<strong>Trust the process:</strong> Every time you label a thought instead of fusing with it, you\'re training emotion regulation. It\'s not dramatic. It compounds quietly and significantly.'
+    },
+    {
+      cat: 'Neuroscience', catClass: 'cat-neuroscience',
+      title: 'The brain changes throughout life — this is not a metaphor',
+      body: 'Neuroplasticity — the brain\'s ability to reorganise itself by forming new neural connections — continues throughout life, not just in childhood. Every time you practise a new response pattern, you are literally building new neural pathways. The old ones don\'t disappear immediately — they fade from lack of use. This is why change feels slow but is actually accumulating.',
+      why: 'You are not stuck with the wiring you were given or developed in difficult years. Every small, repeated choice is reshaping the physical structure of your brain.',
+      remember: '<strong>Literally:</strong> When you choose to label a thought rather than spiral, a new neural connection fires. Do it enough times and it becomes the easier path. The biology is on your side.'
+    },
+    {
+      cat: 'How to listen', catClass: 'cat-listening',
+      title: 'Your body listens even when you don\'t mean it to',
+      body: 'Research on nonverbal communication by Albert Mehrabian and later work by John Gottman on micro-expressions shows that our bodies communicate reception constantly — posture, eye contact, the direction we\'re facing, whether we\'re partially turned away. People feel whether they\'re being listened to before a word is spoken. Leaning slightly forward, uncrossed arms, and steady eye contact signal safety.',
+      why: 'If you want people to open up to you — how your body is positioned when they\'re speaking matters as much as what you say in response.',
+      remember: '<strong>Next time:</strong> When someone is sharing something with you, notice your body. Are you turned toward them? Is your phone down? Your body\'s position tells them whether you\'re actually there.'
+    },
+    {
+      cat: 'Emotional Intelligence', catClass: 'cat-emotional',
+      title: 'Anger is almost always a secondary emotion',
+      body: 'Psychologist Harriet Lerner and other emotion researchers have noted that anger is rarely the primary feeling — it\'s usually covering something more vulnerable: hurt, fear, shame, or sadness. Anger is protective. It feels stronger and more powerful than the soft, exposed feelings underneath. Recognising what\'s beneath the anger is how you get to what actually needs attention.',
+      why: 'When you feel irritated — at not being told first, at unmatched effort, at someone going quiet — the irritation is usually sitting on top of something softer. The anger is the armour.',
+      remember: '<strong>Beneath the anger:</strong> Next time you feel irritated, ask: "What\'s the more vulnerable feeling underneath this?" Usually it\'s hurt, or fear of not mattering.'
+    },
+    {
+      cat: 'Behavioural Science', catClass: 'cat-behaviour',
+      title: 'Social comparison is the thief of present experience',
+      body: 'Leon Festinger\'s social comparison theory (1954) showed that humans have a fundamental drive to evaluate themselves by comparing to others. This was useful in small tribes where knowing your relative status helped survival. In a hyper-connected world with infinite comparison points, it becomes a source of chronic dissatisfaction. Upward comparison (they have what I want) reliably decreases wellbeing.',
+      why: 'When you see others in relationships, getting recognition, or being someone\'s first call — the comparison is happening automatically. The dissatisfaction it produces is real, but it\'s not accurate information about your life.',
+      remember: '<strong>The rule:</strong> Compare yourself only to who you were yesterday. That\'s the only comparison that tells you something true and useful.'
+    },
+    {
+      cat: 'Observation', catClass: 'cat-observation',
+      title: 'Presence is the rarest and most powerful gift you can give another person',
+      body: 'Philosopher Simone Weil wrote: "Attention is the rarest and purest form of generosity." In an age of constant distraction, the ability to be fully present with another person — phone away, mind here, genuinely interested — is increasingly uncommon. People feel it immediately when they have your full attention. It creates safety, trust, and the sense of being valued.',
+      why: 'Full presence doesn\'t require words, advice, or solutions. It only requires that you be completely here. That alone changes the quality of every interaction you have.',
+      remember: '<strong>One conversation:</strong> Today, pick one conversation where you\'re completely present. Not composing your response, not checking your phone. Just here. Notice what changes.'
+    },
+    {
+      cat: 'Psychology', catClass: 'cat-psychology',
+      title: 'Rumination and reflection are not the same thing',
+      body: 'Psychologist Susan Nolen-Hoeksema, who spent decades studying repetitive thinking, drew a clear distinction: reflection is purposeful self-examination aimed at insight and problem-solving. Rumination is repetitive focus on negative feelings and their causes without moving toward resolution. The key difference is not the content of thought but its movement — reflection moves forward; rumination circles.',
+      why: 'Your analytical mind is capable of deep, useful reflection. The same mind, without direction, defaults to rumination. The question to ask yourself is: "Is this thought going somewhere?"',
+      remember: '<strong>The test:</strong> Am I thinking about this to understand something new — or am I thinking about it for the tenth time without getting anywhere? If the latter: close the loop.'
+    },
+    {
+      cat: 'Neuroscience', catClass: 'cat-neuroscience',
+      title: 'Physical movement is one of the fastest mood regulation tools available',
+      body: 'John Ratey\'s research on exercise and the brain shows that even a 20-minute walk increases dopamine, serotonin, and norepinephrine — the same neurotransmitters targeted by antidepressants. It also reduces cortisol (the stress hormone) and activates the prefrontal cortex, improving both mood and decision-making. The effect is immediate, not gradual.',
+      why: 'When your mood drops and you go still, you\'re doing the opposite of what the brain needs. Movement is not a reward for feeling better — it\'s a tool for getting there.',
+      remember: '<strong>Small version:</strong> When your mood dips, don\'t wait to feel like moving. Put on a song and walk, even around your room. 10 minutes changes the chemistry.'
+    },
+    {
+      cat: 'Emotional Intelligence', catClass: 'cat-emotional',
+      title: 'The things that frustrate you most in others are often a mirror',
+      body: 'Shadow work — a concept from Jungian psychology — proposes that qualities we haven\'t integrated in ourselves often irritate us most in others. What we judge harshly in someone else is frequently something we\'ve suppressed, denied, or not allowed in ourselves. Recognising this doesn\'t excuse the other person\'s behaviour — it adds a layer of self-knowledge.',
+      why: 'The patterns that frustrate you most in people — neediness, not putting in effort, not saying what they feel — might be connected to what you most fear or suppress in yourself.',
+      remember: '<strong>The question:</strong> "What am I most critical of in others right now?" Then: "Is there any version of this that exists in me that I haven\'t fully looked at?"'
+    },
+    {
+      cat: 'How to listen', catClass: 'cat-listening',
+      title: 'Asking better questions is a learnable skill',
+      body: 'Clayton Christensen, applying his research to human relationships, noted that most people ask closed questions (yes/no, confirmatory) or leading questions (containing the answer they expect). Open, curious questions — "what\'s that been like for you?" "what matters most to you about this?" — create completely different conversations. They signal genuine interest and invite depth.',
+      why: 'The quality of your relationships is partly a function of the quality of your questions. Shallow questions produce shallow answers. Deep questions invite people to go somewhere real.',
+      remember: '<strong>One shift:</strong> Replace "are you okay?" with "what\'s been on your mind lately?" The first closes. The second opens. See what comes through the open door.'
+    },
+    {
+      cat: 'Behavioural Science', catClass: 'cat-behaviour',
+      title: 'Habits are stored in the brain differently from conscious decisions',
+      body: 'MIT researcher Ann Graybiel\'s work shows that habits are stored in the basal ganglia — a primitive brain region — while deliberate decisions happen in the prefrontal cortex. Once a behaviour becomes a habit, it runs automatically, consuming almost no cognitive resources. This is why breaking habits feels hard: you\'re trying to use a weaker system (willpower) to override a stronger one (automatic routines).',
+      why: 'Compulsive message checking, instant replying, scenario building before bed — these are habits stored in the basal ganglia. They don\'t respond to willpower. They respond to new cue-routine-reward cycles.',
+      remember: '<strong>Replace, don\'t resist:</strong> Instead of "don\'t check the phone," design a different routine for the same cue. When you feel the urge to check — put the phone face down and take 3 slow breaths. New routine, same cue.'
+    },
+    {
+      cat: 'Psychology', catClass: 'cat-psychology',
+      title: 'Feelings of unworthiness are learned — and can be unlearned',
+      body: 'John Bowlby\'s attachment research and its extensions show that core beliefs about lovability and worthiness are formed in early relationship experiences — they\'re not objective truths. A child who received inconsistent attention learns: "I must earn love." A child whose emotions were dismissed learns: "My feelings are too much." These become the operating system — but operating systems can be updated.',
+      why: 'The part of you that feels like you need to earn your place in relationships, that fears being too much, that apologises for having needs — learned that somewhere. It was an adaptation, not a truth.',
+      remember: '<strong>Repeat slowly:</strong> "This is a belief I learned. It is not a fact about who I am." You don\'t have to believe it fully yet. Just hold the possibility.'
+    }
+  ];
+
+  let currentInsightIdx = 0;
+
+  function getInsightOfDay() {
+    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+    return dayOfYear % insights.length;
+  }
+
+  function renderHero(idx) {
+    const ins = insights[idx];
+    document.getElementById('hero-cat').textContent = ins.cat;
+    document.getElementById('hero-title').textContent = ins.title;
+    document.getElementById('hero-body').textContent = ins.body;
+    document.getElementById('hero-why').textContent = ins.why;
+    document.getElementById('ins-idx').textContent = idx + 1;
+    document.getElementById('ins-total').textContent = insights.length;
+    currentInsightIdx = idx;
+  }
+
+  function nextInsight() {
+    const next = (currentInsightIdx + 1) % insights.length;
+    renderHero(next);
+  }
+
+  function prevInsight() {
+    const prev = (currentInsightIdx - 1 + insights.length) % insights.length;
+    renderHero(prev);
+  }
+
+  const todayInsight = insights[getInsightOfDay()];
+  renderHero(getInsightOfDay());
+
+  // Render grid
+  const grid = document.getElementById('insights-grid');
+  insights.forEach((ins, i) => {
+    const card = document.createElement('div');
+    card.className = 'ins-card ' + ins.catClass;
+    card.innerHTML = `
+      <div class="ins-cat">${ins.cat}</div>
+      <div class="ins-title">${ins.title}</div>
+      <div class="ins-preview">${ins.body.substring(0, 80)}...</div>
+    `;
+    card.onclick = () => openModal(ins);
+    grid.appendChild(card);
+  });
+
+  // Modal
+  function openModal(ins) {
+    document.getElementById('modal-cat').textContent = ins.cat;
+    document.getElementById('modal-cat').style.color = ins.catClass === 'cat-psychology' ? 'var(--terracotta)' :
+      ins.catClass === 'cat-neuroscience' ? 'var(--moss)' :
+      ins.catClass === 'cat-behaviour' ? 'var(--amber)' :
+      ins.catClass === 'cat-listening' ? 'var(--sage)' :
+      ins.catClass === 'cat-observation' ? 'var(--clay)' : 'var(--rust)';
+    document.getElementById('modal-title').textContent = ins.title;
+    document.getElementById('modal-body').textContent = ins.body;
+    document.getElementById('modal-remember').innerHTML = ins.remember;
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function closeModal(e) {
+    if (!e || e.target === document.getElementById('modal-overlay') || e.currentTarget.classList.contains('modal-close')) {
+      document.getElementById('modal-overlay').classList.remove('open');
+    }
+  }
+  const mantras = [
+    { text: '"This feeling will pass. It is not who I am — it is just a wave."', problem: 'For: Mood instability' },
+    { text: '"Is this analysis helping me — or haunting me? Enough for now. Let it breathe."', problem: 'For: Overthinking' },
+    { text: '"Before messaging, ask: am I doing this from connection — or from fear?"', problem: 'For: Clinging to relationships' },
+    { text: '"Let life unfold — I don\'t always have to script it."', problem: 'For: Scenario building' },
+    { text: '"Sadness is a visitor, not a home — even if I\'ve lived in it for years."', problem: 'For: Comfort in sadness' },
+    { text: '"Not everything is a riddle. Some moments want to be felt, not figured out."', problem: 'For: Constant overanalysis' },
+    { text: '"I am lovable even in my waiting. Love will find me living — not chasing."', problem: 'For: Conflicted about relationships' },
+    { text: '"I can enjoy being seen without becoming dependent. I am worthy of presence."', problem: 'For: Craving attention' },
+  ];
+  let mantraIdx = 0;
+  function rotateFeatured() {
+    mantraIdx = (mantraIdx + 1) % mantras.length;
+    document.getElementById('featured-mantra-text').textContent = mantras[mantraIdx].text;
+    document.getElementById('featured-mantra-problem').textContent = mantras[mantraIdx].problem;
+  }
+</script>
+</body>
+</html>
