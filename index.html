@@ -348,34 +348,102 @@ body::before{
 }
 .changes-row hr{flex:1;border:none;border-top:1px solid var(--border);}
 .changes-row span{font-size:11px;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;}
-.insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;}
-.ins-card{
-  background:var(--warm-white);border:1px solid var(--border);
-  border-radius:14px;padding:18px 20px;
-  cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;
+/* ── FLIP CARD GRID ── */
+.insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;}
+
+.flip-wrap{
+  perspective:1000px;
+  cursor:pointer;
+  min-height:160px;
 }
-.ins-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0;}
-.ins-card:hover{border-color:var(--clay);transform:translateY(-2px);}
+.flip-inner{
+  position:relative;width:100%;height:100%;
+  transform-style:preserve-3d;
+  transition:transform 0.52s cubic-bezier(0.45,0.05,0.55,0.95);
+}
+.flip-wrap.flipped .flip-inner{transform:rotateY(180deg);}
+
+.flip-front,.flip-back{
+  position:absolute;inset:0;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:14px;padding:18px 20px;
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+
+/* Front face */
+.flip-front{
+  background:var(--warm-white);
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.flip-front::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:14px 14px 0 0;
+}
+.flip-front:hover{border-color:var(--clay);}
 .ins-cat{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:8px;margin-top:6px;}
-.ins-title{font-size:14px;font-weight:500;color:var(--text-dark);line-height:1.4;margin-bottom:6px;}
-.ins-preview{font-size:12px;color:var(--text-muted);line-height:1.6;}
-.ins-today{border-color:var(--terracotta)!important;background:rgba(181,113,74,0.06)!important;}
+.ins-title{font-size:14px;font-weight:500;color:var(--text-dark);line-height:1.4;margin-bottom:8px;flex:1;}
+.ins-tap-hint{
+  font-size:10px;color:var(--text-muted);letter-spacing:0.04em;
+  display:flex;align-items:center;gap:4px;margin-top:auto;
+}
+.ins-tap-hint::after{content:'↻';font-size:12px;}
+
+/* Back face */
+.flip-back{
+  background:var(--bark);
+  transform:rotateY(180deg);
+  display:flex;flex-direction:column;
+  border-color:transparent;
+  overflow-y:auto;
+}
+.back-cat{
+  font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.09em;
+  color:var(--amber-light);margin-bottom:8px;opacity:0.8;
+}
+.back-title{
+  font-family:'Lora',serif;font-size:14px;font-weight:500;
+  color:white;line-height:1.4;margin-bottom:10px;
+}
+.back-body{
+  font-size:12px;color:rgba(255,255,255,0.65);line-height:1.7;
+  margin-bottom:12px;flex:1;
+}
+.back-remember{
+  background:rgba(255,255,255,0.08);border-radius:8px;
+  padding:10px 12px;font-size:11px;
+  color:rgba(255,255,255,0.75);line-height:1.6;
+  border-left:2px solid var(--amber-light);
+}
+.back-remember strong{color:var(--amber-light);font-weight:500;}
+.back-flip-hint{
+  font-size:10px;color:rgba(255,255,255,0.3);
+  margin-top:10px;text-align:right;letter-spacing:0.04em;
+}
+
+/* Today badge */
 .ins-today-badge{
   display:inline-block;background:var(--terracotta);color:white;
   font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;
-  padding:2px 9px;border-radius:999px;margin-bottom:8px;margin-top:4px;
+  padding:2px 9px;border-radius:999px;margin-bottom:8px;margin-top:2px;
 }
-.cat-psychology::before{background:var(--terracotta);}
+.flip-wrap.is-today .flip-front{
+  border-color:var(--terracotta);
+  background:rgba(181,113,74,0.05);
+}
+
+/* Category accent colours */
+.cat-psychology .flip-front::before{background:var(--terracotta);}
 .cat-psychology .ins-cat{color:var(--terracotta);}
-.cat-neuroscience::before{background:var(--moss);}
+.cat-neuroscience .flip-front::before{background:var(--moss);}
 .cat-neuroscience .ins-cat{color:var(--moss);}
-.cat-behaviour::before{background:var(--amber);}
+.cat-behaviour .flip-front::before{background:var(--amber);}
 .cat-behaviour .ins-cat{color:var(--amber);}
-.cat-listening::before{background:var(--sage);}
+.cat-listening .flip-front::before{background:var(--sage);}
 .cat-listening .ins-cat{color:var(--sage);}
-.cat-observation::before{background:var(--clay);}
+.cat-observation .flip-front::before{background:var(--clay);}
 .cat-observation .ins-cat{color:var(--clay);}
-.cat-emotional::before{background:var(--rust);}
+.cat-emotional .flip-front::before{background:var(--rust);}
 .cat-emotional .ins-cat{color:var(--rust);}
 
 /* ── MODAL ── */
@@ -1161,6 +1229,12 @@ body::before{
   }
 
   // ── INSIGHTS ──
+  const catColors = {
+    'cat-psychology':'var(--terracotta)', 'cat-neuroscience':'var(--moss)',
+    'cat-behaviour':'var(--amber)', 'cat-listening':'var(--sage)',
+    'cat-observation':'var(--clay)', 'cat-emotional':'var(--rust)'
+  };
+
   function getInsightOfDay() {
     const start = new Date(2025,0,1);
     const daysSince = Math.floor((now - start) / 86400000);
@@ -1184,24 +1258,49 @@ body::before{
     const grid = document.getElementById('insights-grid');
     insights.forEach((ins, i) => {
       const isToday = i === todayIdx;
-      const card = document.createElement('div');
-      card.className = 'ins-card ' + ins.catClass + (isToday ? ' ins-today' : '');
-      card.innerHTML = (isToday ? '<div class="ins-today-badge">Today</div>' : '') +
-        '<div class="ins-cat">' + ins.cat + '</div>' +
-        '<div class="ins-title">' + ins.title + '</div>' +
-        '<div class="ins-preview">' + ins.body.substring(0,72) + '...</div>';
-      card.onclick = () => openModal(ins);
-      grid.appendChild(card);
+      const catColor = catColors[ins.catClass] || 'var(--terracotta)';
+
+      const wrap = document.createElement('div');
+      wrap.className = 'flip-wrap ' + ins.catClass + (isToday ? ' is-today' : '');
+
+      wrap.innerHTML = `
+        <div class="flip-inner">
+          <div class="flip-front">
+            ${isToday ? '<div class="ins-today-badge">Today</div>' : ''}
+            <div class="ins-cat">${ins.cat}</div>
+            <div class="ins-title">${ins.title}</div>
+            <div class="ins-tap-hint">Tap to reveal</div>
+          </div>
+          <div class="flip-back">
+            <div class="back-cat">${ins.cat}</div>
+            <div class="back-title">${ins.title}</div>
+            <div class="back-body">${ins.body}</div>
+            <div class="back-remember">${ins.remember}</div>
+            <div class="back-flip-hint">tap to flip back ↻</div>
+          </div>
+        </div>`;
+
+      wrap.addEventListener('click', () => {
+        // collapse all others first
+        document.querySelectorAll('.flip-wrap.flipped').forEach(el => {
+          if(el !== wrap) el.classList.remove('flipped');
+        });
+        wrap.classList.toggle('flipped');
+        // expand height for back content
+        const inner = wrap.querySelector('.flip-inner');
+        if(wrap.classList.contains('flipped')) {
+          const back = wrap.querySelector('.flip-back');
+          wrap.style.minHeight = Math.max(160, back.scrollHeight + 10) + 'px';
+        } else {
+          wrap.style.minHeight = '160px';
+        }
+      });
+
+      grid.appendChild(wrap);
     });
   })();
 
   // ── MODAL ──
-  const catColors = {
-    'cat-psychology':'var(--terracotta)', 'cat-neuroscience':'var(--moss)',
-    'cat-behaviour':'var(--amber)', 'cat-listening':'var(--sage)',
-    'cat-observation':'var(--clay)', 'cat-emotional':'var(--rust)'
-  };
-
   function openModal(ins) {
     document.getElementById('modal-cat').textContent = ins.cat;
     document.getElementById('modal-cat').style.color = catColors[ins.catClass] || 'var(--terracotta)';
