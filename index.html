@@ -8,8 +8,8 @@
 <meta name="apple-mobile-web-app-title" content="Abhi's Mind">
 <meta name="theme-color" content="#F5F0E8">
 <meta name="description" content="A personal space for honest self-growth — one day at a time.">
-<link rel="manifest" href="data:application/json,{%22name%22:%22Arav%27s+Mind%22,%22short_name%22:%22Arav%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23F5F0E8%22,%22theme_color%22:%22%23F5F0E8%22}">
-<title>Arav's Mind</title>
+<link rel="manifest" href="data:application/json,{%22name%22:%22Abhi%27s+Mind%22,%22short_name%22:%22Abhi%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23F5F0E8%22,%22theme_color%22:%22%23F5F0E8%22}">
+<title>Abhi's Mind</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -582,7 +582,7 @@ body::before{
   <!-- ═══ SIDEBAR (desktop) ═══ -->
   <aside class="sidebar">
     <div class="sidebar-brand">
-      <h1>Arav's <span>Mind</span></h1>
+      <h1>Abhi's <span>Mind</span></h1>
       <p>A personal space for honest self-growth</p>
     </div>
 
@@ -617,7 +617,7 @@ body::before{
 
   <!-- ═══ MOBILE TOP BAR ═══ -->
   <div class="mobile-topbar">
-    <h1>Arav's <span>Mind</span></h1>
+    <h1>Abhi's <span>Mind</span></h1>
     <div class="topbar-date" id="m-date-short"></div>
   </div>
 
@@ -1180,7 +1180,7 @@ body::before{
   if(mds) mds.textContent = shortDate;
 
   // ── STREAK ──
-  const streak = parseInt(localStorage.getItem('arav_streak') || '1');
+  const streak = parseInt(localStorage.getItem('abhi_streak') || '1');
   const dayLabels = ['M','T','W','T','F','S','S'];
 
   function buildDots(containerId, dotClass) {
@@ -1220,12 +1220,12 @@ body::before{
 
   // ── MARK DONE ──
   function markDayDone() {
-    const cur = parseInt(localStorage.getItem('arav_streak') || '1');
-    localStorage.setItem('arav_streak', cur + 1);
+    const cur = parseInt(localStorage.getItem('abhi_streak') || '1');
+    localStorage.setItem('abhi_streak', cur + 1);
     ['s-streak-num','m-streak-num'].forEach(id => {
       const el = document.getElementById(id); if(el) el.textContent = cur + 1;
     });
-    alert('Well done, Arav. Day ' + cur + ' done. See you tomorrow.');
+    alert('Well done, Abhi. Day ' + cur + ' done. See you tomorrow.');
   }
 
   // ── INSIGHTS ──
