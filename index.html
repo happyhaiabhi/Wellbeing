@@ -655,29 +655,6 @@
     font-weight: 500;
   }
 
-  .insight-nav-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 28px;
-  }
-  .insight-counter {
-    font-size: 12px;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
-  }
-  .insight-nav-btns { display: flex; gap: 8px; }
-  .ins-nav-btn {
-    background: var(--warm-white);
-    border: 1px solid var(--border-strong);
-    border-radius: 8px;
-    padding: 7px 16px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    color: var(--text-soft);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
   .ins-nav-btn:hover { background: var(--sand); color: var(--text-dark); }
 
   .insights-grid {
@@ -737,6 +714,24 @@
   .cat-observation .ins-cat { color: var(--clay); }
   .cat-emotional::before { background: var(--rust); }
   .cat-emotional .ins-cat { color: var(--rust); }
+
+  .ins-today {
+    border-color: var(--terracotta) !important;
+    background: rgba(181,113,74,0.06) !important;
+  }
+  .ins-today-badge {
+    display: inline-block;
+    background: var(--terracotta);
+    color: white;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 2px 9px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+    margin-top: 4px;
+  }
 
   .insight-modal-overlay {
     display: none;
@@ -1174,8 +1169,10 @@
   <!-- INSIGHTS -->
   <div id="tab-insights" class="view">
 
-    <!-- Hero card — today's insight -->
-    <div class="insight-hero" onclick="openModal(todayInsight)">
+    <div class="section-label" id="insight-day-label">Today's insight</div>
+
+    <!-- Hero card — today's insight only, click to expand -->
+    <div class="insight-hero" id="insight-hero-card" onclick="openModal(todayInsight)">
       <div class="insight-category-badge">
         <div class="cat-dot"></div>
         <span id="hero-cat">Psychology</span>
@@ -1183,17 +1180,16 @@
       <div class="insight-hero-title" id="hero-title">Loading today's insight...</div>
       <div class="insight-hero-body" id="hero-body"></div>
       <div class="insight-hero-why"><strong>Why this matters:</strong> <span id="hero-why"></span></div>
+      <div style="margin-top:18px; font-size:12px; color:rgba(255,255,255,0.35); letter-spacing:0.04em;">Tap to read the full insight + practice →</div>
     </div>
 
-    <div class="insight-nav-row">
-      <div class="insight-counter"><span id="ins-idx">1</span> of <span id="ins-total">40</span> insights</div>
-      <div class="insight-nav-btns">
-        <button class="ins-nav-btn" onclick="prevInsight()">← Prev</button>
-        <button class="ins-nav-btn" onclick="nextInsight()">Next →</button>
-      </div>
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:28px;">
+      <div style="flex:1; height:1px; background:var(--border);"></div>
+      <div style="font-size:11px; color:var(--text-muted); letter-spacing:0.06em; text-transform:uppercase; white-space:nowrap;">Changes tomorrow</div>
+      <div style="flex:1; height:1px; background:var(--border);"></div>
     </div>
 
-    <div class="section-label">Browse all insights</div>
+    <div class="section-label">All insights — browse anytime</div>
     <div class="insights-grid" id="insights-grid"></div>
 
   </div>
@@ -1556,50 +1552,46 @@
     }
   ];
 
-  let currentInsightIdx = 0;
-
+  // ── INSIGHTS ───────────────────────────────────────────────────
   function getInsightOfDay() {
-    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-    return dayOfYear % insights.length;
+    const start = new Date(2025, 0, 1);
+    const now = new Date();
+    const daysSinceStart = Math.floor((now - start) / 86400000);
+    return daysSinceStart % insights.length;
   }
 
-  function renderHero(idx) {
-    const ins = insights[idx];
+  const todayIdx = getInsightOfDay();
+  const todayInsight = insights[todayIdx];
+
+  // Render hero — today only
+  (function renderHero() {
+    const ins = todayInsight;
     document.getElementById('hero-cat').textContent = ins.cat;
     document.getElementById('hero-title').textContent = ins.title;
     document.getElementById('hero-body').textContent = ins.body;
     document.getElementById('hero-why').textContent = ins.why;
-    document.getElementById('ins-idx').textContent = idx + 1;
-    document.getElementById('ins-total').textContent = insights.length;
-    currentInsightIdx = idx;
-  }
+    // Label with actual date
+    const dateStr = new Date().toLocaleDateString('en-IN', { day:'numeric', month:'long' });
+    document.getElementById('insight-day-label').textContent = 'Today\'s insight — ' + dateStr;
+  })();
 
-  function nextInsight() {
-    const next = (currentInsightIdx + 1) % insights.length;
-    renderHero(next);
-  }
-
-  function prevInsight() {
-    const prev = (currentInsightIdx - 1 + insights.length) % insights.length;
-    renderHero(prev);
-  }
-
-  const todayInsight = insights[getInsightOfDay()];
-  renderHero(getInsightOfDay());
-
-  // Render grid
-  const grid = document.getElementById('insights-grid');
-  insights.forEach((ins, i) => {
-    const card = document.createElement('div');
-    card.className = 'ins-card ' + ins.catClass;
-    card.innerHTML = `
-      <div class="ins-cat">${ins.cat}</div>
-      <div class="ins-title">${ins.title}</div>
-      <div class="ins-preview">${ins.body.substring(0, 80)}...</div>
-    `;
-    card.onclick = () => openModal(ins);
-    grid.appendChild(card);
-  });
+  // Render grid — all insights, today's card highlighted
+  (function renderGrid() {
+    const grid = document.getElementById('insights-grid');
+    insights.forEach((ins, i) => {
+      const isToday = i === todayIdx;
+      const card = document.createElement('div');
+      card.className = 'ins-card ' + ins.catClass + (isToday ? ' ins-today' : '');
+      card.innerHTML = `
+        ${isToday ? '<div class="ins-today-badge">Today</div>' : ''}
+        <div class="ins-cat">${ins.cat}</div>
+        <div class="ins-title">${ins.title}</div>
+        <div class="ins-preview">${ins.body.substring(0, 72)}...</div>
+      `;
+      card.onclick = () => openModal(ins);
+      grid.appendChild(card);
+    });
+  })();
 
   // Modal
   function openModal(ins) {
